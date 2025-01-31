@@ -135,11 +135,11 @@ const LandingSection = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row justify-start pt-10 items-center gap-12 container lg:pt-16 xl:pt-28">
-        <h2 className="font-semibold text-4xl">
+      <div className="flex flex-col lg:flex-row justify-start pt-10 items-center gap-5 lg:gap-12 container lg:pt-16 xl:pt-28">
+        <h2 className="font-semibold text-2xl lg:text-4xl">
           More than $50 million is raised every week on GoFundMe.*
         </h2>
-        <h2 className="text-secondary text-2xl font-normal">
+        <h2 className="text-secondary text-xl lg:text-2xl font-normal">
           Get started in just a few minutes — with helpful new tools, it's
           easier than ever to pick the perfect title, write a compelling story,
           and share it with the world.
