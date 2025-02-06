@@ -19,6 +19,7 @@
 import RootLayout from "@/components/shared/RootLayout";
 import { paths } from "@/constants/paths";
 import HomePage from "@/pages/home";
+import BrowsePage from "@/pages/list";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: paths.HOME,
         element: <HomePage />,
+      },
+      {
+        path: paths.BROWSE,
+        element: <BrowsePage />,
       },
     ], // отсюда удалишь
   },

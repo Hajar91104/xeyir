@@ -6,12 +6,15 @@ import { useEffect, useState } from "react";
 import { PiHandHeartThin } from "react-icons/pi";
 import { TbHeartHandshake } from "react-icons/tb";
 import { BsInfoSquare } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+import { paths } from "@/constants/paths";
 
 const Navbar = () => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const navigate = useNavigate();
 
   const handleMouseEnter = (item: string) => {
     if (timeoutId) clearTimeout(timeoutId);
@@ -47,7 +50,10 @@ const Navbar = () => {
     >
       <div className="container flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex items-center cursor-pointer py-1 px-2 rounded-[10px] duration-500 hover:bg-[#2525250d]">
+          <div
+            onClick={() => navigate(paths.BROWSE)}
+            className="flex items-center cursor-pointer py-1 px-2 rounded-[10px] duration-500 hover:bg-[#2525250d]"
+          >
             <img
               className="h-6 w-6 lg:h-4 lg:w-4"
               src={SearchIcon}

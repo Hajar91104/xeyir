@@ -102,7 +102,7 @@ const LandingSection = () => {
                 Education
               </span>
             </div>
-            <div className="relative translate-x-24 xl:translate-x-40">
+            <div className="relative translate-x-20 xl:translate-x-40">
               <img
                 src={Frame}
                 alt="frame"

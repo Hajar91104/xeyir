@@ -1,6 +1,7 @@
 import DiscoverSection from "./components/Discover";
 import FundraisingSteps from "./components/Guide";
 import LandingSection from "./components/Landing";
+import TutorialVideoSection from "./components/TutorialVideo";
 
 const HomePage = () => {
   return (
@@ -8,7 +9,7 @@ const HomePage = () => {
       <LandingSection />
       <FundraisingSteps />
       <DiscoverSection />
-      <div className="container"></div>
+      <TutorialVideoSection />
     </div>
   );
 };
