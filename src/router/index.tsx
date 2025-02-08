@@ -18,6 +18,7 @@
 
 import RootLayout from "@/components/shared/RootLayout";
 import { paths } from "@/constants/paths";
+import CheckoutPage from "@/pages/checkout";
 import DetailsPage from "@/pages/details";
 import HomePage from "@/pages/home";
 import BrowsePage from "@/pages/list";
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
       {
         path: paths.DETAIL(),
         element: <DetailsPage />,
+      },
+      {
+        path: paths.CHECKOUT(),
+        element: <CheckoutPage />,
       },
     ], // отсюда удалишь
   },
