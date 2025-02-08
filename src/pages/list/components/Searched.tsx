@@ -1,5 +1,4 @@
 import { ChevronDown, X } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { MdOutlineTune } from "react-icons/md";
 import Discover1 from "@/assets/images/discover1.jpg";
 import Discover2 from "@/assets/images/discover2.jpg";
@@ -16,6 +15,7 @@ import { FiDelete } from "react-icons/fi";
 
 import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
+import DonationCard from "@/components/shared/DonationCard";
 
 interface Fundraiser {
   image: string;
@@ -305,7 +305,7 @@ const SearchedSection = () => {
         />
       )}
 
-      <div className="container py-8">
+      <div className=" py-8">
         <div className="flex flex-wrap gap-2 mb-8">
           <button
             onClick={() => setShowFilters(true)}
@@ -486,40 +486,7 @@ const SearchedSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {displayedFundraisers.map((fundraiser, index) => (
-            <Card
-              key={index}
-              className="rounded-xl overflow-hidden cursor-pointer hover:shadow-sm transition-all duration-300 hover:bg-[#fbfaf8]"
-            >
-              <div className="h-[160px] overflow-hidden">
-                <img
-                  src={fundraiser.image}
-                  alt={fundraiser.title}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="font-bold text-base mb-1 line-clamp-2">
-                  {fundraiser.title}
-                </h3>
-                {/* <p className="text-sm text-[#6b6966] mb-4">
-                  by {fundraiser.author}
-                </p> */}
-                <div className="w-full rounded-full overflow-hidden bg-[#e5e1d7] mb-2">
-                  <div
-                    className="h-2 bg-gradient-to-r from-[#00b65e] to-[#008044] rounded-full"
-                    style={{
-                      width: `${Math.min(
-                        (fundraiser.amountRaised / fundraiser.goalAmount) * 100,
-                        100
-                      )}%`,
-                    }}
-                  />
-                </div>
-                <p className="font-medium">
-                  ${fundraiser.amountRaised.toLocaleString()} raised
-                </p>
-              </div>
-            </Card>
+            <DonationCard fundraiser={fundraiser} key={index} />
           ))}
         </div>
         <p className="text-sm font-bold w-full text-center mb-8">

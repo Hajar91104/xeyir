@@ -107,7 +107,7 @@ export default function DiscoverSection() {
         Discover fundraisers inspired by what you care about
       </h2>
       <div className="flex flex-col lg:flex-row justify-between items-center mb-6 lg:mb-8 gap-4">
-        <button className="text-[#252525] font-bold rounded-3xl py-1 px-6 border border-[#c0bdb8] hover:bg-[#2525250d] hover:border-secondary">
+        <button className="text-[#252525] font-bold rounded-3xl py-1 px-6 border border-[#c0bdb8] cursor-none">
           Happening worldwide
         </button>
         <div className="flex items-center gap-2">

@@ -18,6 +18,7 @@
 
 import RootLayout from "@/components/shared/RootLayout";
 import { paths } from "@/constants/paths";
+import DetailsPage from "@/pages/details";
 import HomePage from "@/pages/home";
 import BrowsePage from "@/pages/list";
 import { createBrowserRouter } from "react-router-dom";
@@ -35,15 +36,15 @@ export const router = createBrowserRouter([
         path: paths.BROWSE,
         element: <BrowsePage />,
       },
+      {
+        path: paths.DETAIL(),
+        element: <DetailsPage />,
+      },
     ], // отсюда удалишь
   },
   //       {
   //         path: paths.LIST,
   //         element: <RentListPage />,
-  //       },
-  //       {
-  //         path: paths.DETAIL(),
-  //         element: <DetailsPage />,
   //       },
   //       {
   //         path: "",
