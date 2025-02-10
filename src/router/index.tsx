@@ -18,10 +18,13 @@
 
 import RootLayout from "@/components/shared/RootLayout";
 import { paths } from "@/constants/paths";
+import LoginPage from "@/pages/auth/Login";
+import RegistrationPage from "@/pages/auth/Registration";
 import CheckoutPage from "@/pages/checkout";
 import DetailsPage from "@/pages/details";
 import HomePage from "@/pages/home";
 import BrowsePage from "@/pages/list";
+import ProfilePage from "@/pages/profile";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -46,6 +49,18 @@ export const router = createBrowserRouter([
         element: <CheckoutPage />,
       },
     ], // отсюда удалишь
+  },
+  {
+    path: paths.LOGIN,
+    element: <LoginPage />,
+  },
+  {
+    path: paths.REGISTER,
+    element: <RegistrationPage />,
+  },
+  {
+    path: paths.PROFILE.MAIN,
+    element: <ProfilePage />,
   },
   //       {
   //         path: paths.LIST,

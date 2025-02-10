@@ -3,6 +3,8 @@ export const paths = {
   BROWSE: "/browse",
   DETAIL: (id = ":id") => `/detail/${id}`,
   CHECKOUT: (id = ":id") => `/checkout/${id}`,
+  LOGIN: "/login",
+  REGISTER: "/registration",
   PROFILE: {
     MAIN: "/profile",
     GOFUNDME: {
@@ -10,11 +12,11 @@ export const paths = {
       CREATE: "/profile/gofundme/create",
       EDIT: (id = ":id") => `/profile/gofundme/edit/${id}`,
     },
-    ORGANISATION: {
-      LIST: "/profile/organisation",
-      CREATE: "/profile/organisation/create",
-      EDIT: (id = ":id") => `/profile/organisation/edit/${id}`,
-    },
+    // ORGANISATION: {
+    //   LIST: "/profile/organisation",
+    //   CREATE: "/profile/organisation/create",
+    //   EDIT: (id = ":id") => `/profile/organisation/edit/${id}`,
+    // },
   },
   DASHBOARD: {
     MAIN: "/dashboard",
@@ -22,10 +24,10 @@ export const paths = {
       LIST: "/dashboard/gofundme",
       EDIT: (id = ":id") => `/dashboard/gofundme/edit/${id}`,
     },
-    ORGANISATION: {
-      LIST: "/dashboard/organisation",
-      EDIT: (id = ":id") => `/dashboard/organisation/edit/${id}`,
-    },
+    // ORGANISATION: {
+    //   LIST: "/dashboard/organisation",
+    //   EDIT: (id = ":id") => `/dashboard/organisation/edit/${id}`,
+    // },
     REVIEWS: {
       LIST: "/dashboard/reviews",
     },
