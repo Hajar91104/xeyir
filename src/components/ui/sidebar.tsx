@@ -213,11 +213,14 @@ const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        className="group peer hidden text-sidebar-foreground md:block"
-        data-state={state}
-        data-collapsible={state === "collapsed" ? collapsible : ""}
-        data-variant={variant}
-        data-side={side}
+        className={cn(
+          "hidden lg:block group peer text-sidebar-foreground", // Hides sidebar below 990px
+          "max-lg:hidden", // Ensures it disappears at max 990px
+          "data-state={state}",
+          "data-collapsible={state === 'collapsed' ? collapsible : ''}",
+          "data-variant={variant}",
+          "data-side={side}"
+        )}
       >
         {/* This is what handles the sidebar gap on desktop */}
         <div

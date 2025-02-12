@@ -1,5 +1,11 @@
+import ActionForm from "../components/ActionForm";
+
 const EditPage = () => {
-  return <div>EditPage</div>;
+  return (
+    <div>
+      <ActionForm type="edit" />
+    </div>
+  );
 };
 
 export default EditPage;

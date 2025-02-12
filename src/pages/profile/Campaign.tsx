@@ -22,7 +22,9 @@ const CampaignPage = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="font-semibold text-2xl py-6">Your Campaigns</h1>
+        <h1 className="font-semibold text-lg sm:text-2xl py-6">
+          Your Campaigns
+        </h1>
         <Button onClick={() => navigate(paths.PROFILE.GOFUNDME.CREATE)}>
           Create +
         </Button>

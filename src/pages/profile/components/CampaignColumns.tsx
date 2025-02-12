@@ -44,7 +44,7 @@ export const campaignColumns: ColumnDef<Campaign>[] = [
   },
   {
     accessorKey: "description",
-    header: "Description",
+    header: () => <span className="hidden sm:block">Description</span>,
     cell: ({ row }) => {
       const description = row.original.description;
       const truncated =
@@ -52,27 +52,28 @@ export const campaignColumns: ColumnDef<Campaign>[] = [
           ? description.slice(0, 100) + "..."
           : description;
 
-      return <p className="text-gray-600">{truncated}</p>;
+      return <p className="text-gray-600 hidden sm:block">{truncated}</p>;
     },
   },
   {
     accessorKey: "date",
-    header: "Date",
+    header: () => <span className="hidden sm:block">Date</span>,
     cell: ({ row }) => {
       return (
-        <span className="text-nowrap">
-          {format(row.original.date, "MMM d, yyyy")}
+        <span className="text-nowrap hidden sm:block">
+          {format(row.original.date, "dd.MM.yyyy")}
         </span>
       );
     },
   },
   {
     accessorKey: "goalAmount",
-    header: "Goal",
+    header: () => <span className="hidden sm:block">Goal</span>,
+
     cell: ({ row }) => {
       return (
-        <span className="font-medium text-nowrap">
-          {row.original.currency} {row.original.goalAmount.toLocaleString()}
+        <span className="hidden sm:block text-nowrap">
+          {row.original.goalAmount.toLocaleString()} {row.original.currency}
         </span>
       );
     },

@@ -1,5 +1,11 @@
+import ActionForm from "../components/ActionForm";
+
 const CreatePage = () => {
-  return <div>CreatePage</div>;
+  return (
+    <div>
+      <ActionForm type="create" />
+    </div>
+  );
 };
 
 export default CreatePage;

@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { SidebarProvider } from "../ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 
 import { ProfileSidebar } from "./ProfileSidebar";
 import { paths } from "@/constants/paths";
@@ -29,7 +29,7 @@ export const ProfileLayout = () => {
       <SidebarProvider>
         <ProfileSidebar />
         <main className="w-full px-6 relative pt-4">
-          {/* <SidebarTrigger className=" absolute left-8 top-6" /> */}
+          <SidebarTrigger className=" lg:hidden absolute left-8 top-6" />
           <div className="p-6 rounded-[10px] bg-white w-full">
             <Outlet />
           </div>

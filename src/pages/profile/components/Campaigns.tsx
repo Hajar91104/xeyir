@@ -109,7 +109,7 @@ const CampaignsSection = () => {
       <h1 className="font-semibold text-2xl mt-12 mb-5">
         Campaigns you've contributed so far:
       </h1>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid sm:grid-cols-4 grid-cols-1 gap-3">
         {fundraisers.map((fundraiser, index) => (
           <DonationCard
             key={index}

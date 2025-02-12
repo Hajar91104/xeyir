@@ -16,26 +16,30 @@ export const contributionColumns: ColumnDef<Contribution>[] = [
     header: "Date",
   },
   {
-    accessorKey: "currency",
-    header: "Currency",
-  },
-  {
     accessorKey: "amount",
     header: "Amount",
+    cell: ({ row }) => (
+      <span className="text-sm">
+        {row.original.amount.toLocaleString()} {row.original.currency}
+      </span>
+    ),
   },
   {
     accessorKey: "tip",
-    header: "Tip",
+    header: () => <span className="hidden sm:inline">Tip</span>,
+    cell: ({ row }) => (
+      <span className="text-sm hidden sm:inline">
+        {row.original.tip.toLocaleString()} {row.original.currency}
+      </span>
+    ),
   },
   {
     accessorKey: "title",
     header: "Title",
-    cell: ({ row }) => {
-      return (
-        <Link to={`/detail/${row.original.id}`} className=" hover:underline">
-          {row.original.title}
-        </Link>
-      );
-    },
+    cell: ({ row }) => (
+      <Link to={`/detail/${row.original.id}`} className="hover:underline">
+        {row.original.title}
+      </Link>
+    ),
   },
 ];

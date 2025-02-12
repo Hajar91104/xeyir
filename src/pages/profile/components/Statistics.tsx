@@ -67,7 +67,7 @@ const chartConfig = {
 
 const StatisticsSection = () => {
   return (
-    <div className="flex items-end justify-center gap-12">
+    <div className="flex sm:flex-row flex-col   sm:items-end justify-center gap-6 sm:gap-12">
       <Card>
         <CardHeader>
           <CardTitle>Bar Chart</CardTitle>
