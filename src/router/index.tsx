@@ -16,6 +16,7 @@
 // import { DashboardReviewsListPage } from "@/pages/(dashboard)/review/list";
 // import { ChatPage } from "@/pages/(dashboard)/chat";
 
+import { ProfileLayout } from "@/components/shared/ProfileLayout";
 import RootLayout from "@/components/shared/RootLayout";
 import { paths } from "@/constants/paths";
 import LoginPage from "@/pages/auth/Login";
@@ -25,6 +26,10 @@ import DetailsPage from "@/pages/details";
 import HomePage from "@/pages/home";
 import BrowsePage from "@/pages/list";
 import ProfilePage from "@/pages/profile";
+import CampaignPage from "@/pages/profile/Campaign";
+import ContributionsPage from "@/pages/profile/Contributions";
+import CreatePage from "@/pages/profile/create";
+import EditPage from "@/pages/profile/edit";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -59,8 +64,30 @@ export const router = createBrowserRouter([
     element: <RegistrationPage />,
   },
   {
-    path: paths.PROFILE.MAIN,
-    element: <ProfilePage />,
+    path: "",
+    element: <ProfileLayout />,
+    children: [
+      {
+        path: paths.PROFILE.MAIN,
+        element: <ProfilePage />,
+      },
+      {
+        path: paths.PROFILE.CONTRIBUTIONS,
+        element: <ContributionsPage />,
+      },
+      {
+        path: paths.PROFILE.GOFUNDME.LIST,
+        element: <CampaignPage />,
+      },
+      {
+        path: paths.PROFILE.GOFUNDME.CREATE,
+        element: <CreatePage />,
+      },
+      {
+        path: paths.PROFILE.GOFUNDME.EDIT(),
+        element: <EditPage />,
+      },
+    ],
   },
   //       {
   //         path: paths.LIST,

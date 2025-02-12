@@ -198,7 +198,12 @@ const Navbar = () => {
             )}
           </div>
         </div>
-        <h1 className="font-black text-primary-foreground text-2xl">XEYIR</h1>
+        <h1
+          onClick={() => navigate(paths.HOME)}
+          className="font-black text-primary-foreground text-2xl"
+        >
+          XEYIR
+        </h1>
         <div className="flex items-center gap-2">
           <div
             className="relative"

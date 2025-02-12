@@ -1,7 +1,13 @@
-import React from "react";
+import CampaignsSection from "./components/Campaigns";
+import StatisticsSection from "./components/Statistics";
 
 const ProfilePage = () => {
-  return <div>ProfilePage</div>;
+  return (
+    <div>
+      <StatisticsSection />
+      <CampaignsSection />
+    </div>
+  );
 };
 
 export default ProfilePage;
