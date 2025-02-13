@@ -25,10 +25,11 @@ export const paths = {
       LIST: "/dashboard/gofundme",
       EDIT: (id = ":id") => `/dashboard/gofundme/edit/${id}`,
     },
-    // ORGANISATION: {
-    //   LIST: "/dashboard/organisation",
-    //   EDIT: (id = ":id") => `/dashboard/organisation/edit/${id}`,
-    // },
+    NONPROFIT: {
+      LIST: "/dashboard/nonprofit",
+      CREATE: "/dashboard/nonprofit/create",
+      EDIT: (id = ":id") => `/dashboard/nonprofit/edit/${id}`,
+    },
     REVIEWS: {
       LIST: "/dashboard/reviews",
     },

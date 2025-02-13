@@ -34,7 +34,7 @@ export const campaignColumns: ColumnDef<Campaign>[] = [
     cell: ({ row }) => {
       return (
         <Link
-          to={`/fundraiser/${row.original.id}`}
+          to={`/detail/${row.original.id}`}
           className="hover:underline font-medium"
         >
           {row.original.title}

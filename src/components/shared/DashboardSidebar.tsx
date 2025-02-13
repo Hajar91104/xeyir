@@ -12,31 +12,32 @@ import {
 } from "@/components/ui/sidebar";
 import { paths } from "@/constants/paths";
 import Avatar from "@/assets/images/avatar.jpg";
+import { BsFillChatHeartFill } from "react-icons/bs";
 
 const items = [
   {
-    title: "Profile",
-    url: paths.PROFILE.MAIN,
+    title: "Main",
+    url: paths.DASHBOARD.MAIN,
     icon: <TbHomeHeart size={20} />,
   },
   {
-    title: "Contributions",
-    url: paths.PROFILE.CONTRIBUTIONS,
+    title: "Campaigns",
+    url: paths.DASHBOARD.GOFUNDME.LIST,
     icon: <PiHandHeartLight size={20} />,
   },
   {
-    title: "My Campaigns",
-    url: paths.PROFILE.GOFUNDME.LIST,
+    title: "Reviews",
+    url: paths.DASHBOARD.REVIEWS.LIST,
     icon: <MdOutlineCampaign size={20} />,
   },
-  // {
-  //   title: "Chat",
-  //   url: paths.PROFILE.CHAT.VIEW,
-  //   icon: MessageCircleIcon,
-  // },
+  {
+    title: "Chat",
+    url: paths.DASHBOARD.CHAT.VIEW,
+    icon: <BsFillChatHeartFill size={20} />,
+  },
 ];
 
-export const ProfileSidebar = () => {
+export const DashboardSidebar = () => {
   return (
     <Sidebar className=" sticky ">
       <SidebarContent className="p-3">
@@ -51,8 +52,7 @@ export const ProfileSidebar = () => {
                 />
               </div>
               <div>
-                <h1 className="font-semibold text-base">Hajar Mammadova</h1>
-                <p className="text-xs text-secondary">Joined 10.02.2025</p>
+                <h1 className="font-semibold text-base">Admin</h1>
               </div>
             </div>
             <SidebarMenu>

@@ -1,35 +1,21 @@
-// import { DashboardLayout } from "@/components/shared/DashboardLayout";
-// import RootLayout from "@/components/shared/RootLayout";
-// import { paths } from "@/constants/paths";
-// import { DetailsPage } from "@/pages/(business)/details";
-// import HomePage from "@/pages/(business)/home";
-// import { RentListPage } from "@/pages/(business)/list";
-// import { PaymentPage } from "@/pages/(business)/payment";
-// import { DashboardMainPage } from "@/pages/(dashboard)/main";
-// import { DashboardRentListPage } from "@/pages/(dashboard)/rents/list";
-// import { DashboardRentCreatePage } from "@/pages/(dashboard)/rents/create";
-// import { createBrowserRouter } from "react-router-dom";
-// import EditPage from "@/pages/(dashboard)/rents/edit";
-// import { AuthLayout } from "@/components/shared/AuthLoayout";
-// import { ReservationsPage } from "@/pages/(business)/reservations";
-// import { DashboardReservationsListPage } from "@/pages/(dashboard)/reservations/list";
-// import { DashboardReviewsListPage } from "@/pages/(dashboard)/review/list";
-// import { ChatPage } from "@/pages/(dashboard)/chat";
-
+import { DashboardLayout } from "@/components/shared/DashboardLayout";
 import { ProfileLayout } from "@/components/shared/ProfileLayout";
 import RootLayout from "@/components/shared/RootLayout";
 import { paths } from "@/constants/paths";
+import DashboardMain from "@/pages/(dashboard)";
+import CampaignDashboardPage from "@/pages/(dashboard)/Campaign";
+import ReviewsDashboardPage from "@/pages/(dashboard)/Reviews";
+import CheckoutPage from "@/pages/(public)/checkout";
+import DetailsPage from "@/pages/(public)/details";
+import HomePage from "@/pages/(public)/home";
+import BrowsePage from "@/pages/(public)/list";
+import ProfilePage from "@/pages/(public)/profile";
+import CampaignPage from "@/pages/(public)/profile/Campaign";
+import ContributionsPage from "@/pages/(public)/profile/Contributions";
+import CreatePage from "@/pages/(public)/profile/create";
+import EditPage from "@/pages/(public)/profile/edit";
 import LoginPage from "@/pages/auth/Login";
 import RegistrationPage from "@/pages/auth/Registration";
-import CheckoutPage from "@/pages/checkout";
-import DetailsPage from "@/pages/details";
-import HomePage from "@/pages/home";
-import BrowsePage from "@/pages/list";
-import ProfilePage from "@/pages/profile";
-import CampaignPage from "@/pages/profile/Campaign";
-import ContributionsPage from "@/pages/profile/Contributions";
-import CreatePage from "@/pages/profile/create";
-import EditPage from "@/pages/profile/edit";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -86,6 +72,24 @@ export const router = createBrowserRouter([
       {
         path: paths.PROFILE.GOFUNDME.EDIT(),
         element: <EditPage />,
+      },
+    ],
+  },
+  {
+    path: "",
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: paths.DASHBOARD.MAIN,
+        element: <DashboardMain />,
+      },
+      {
+        path: paths.DASHBOARD.GOFUNDME.LIST,
+        element: <CampaignDashboardPage />,
+      },
+      {
+        path: paths.DASHBOARD.REVIEWS.LIST,
+        element: <ReviewsDashboardPage />,
       },
     ],
   },
