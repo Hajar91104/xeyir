@@ -16,7 +16,7 @@ passport.deserializeUser(async (id, done) => {
     return done(new Error("User not found"));
   }
   const userObj: IUser = user.toObject();
-  // delete userObj.password;
+  delete userObj.password;
   done(null, userObj);
 });
 
@@ -41,7 +41,7 @@ export default passport.use(
           });
         }
         const userObj: IUser = user.toObject();
-        // delete userObj.password;
+        delete userObj.password;
         done(null, userObj);
       } catch (error) {
         done(null, false, {

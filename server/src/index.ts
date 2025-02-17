@@ -13,7 +13,7 @@ import { Server } from "socket.io";
 // import "./mongoose/schemas/review";
 
 import authRoutes from "./routes/auth";
-// import locationRoutes from "./routes/location";
+import locationRoutes from "./routes/location";
 // import categoryRoutes from "./routes/category";
 // import rentRoutes from "./routes/rent";
 // import reservationRoutes from "./routes/reservation";
@@ -56,7 +56,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoutes);
-// app.use("/location", locationRoutes);
+app.use("/location", locationRoutes);
 // app.use("/category", categoryRoutes);
 // app.use("/rent", rentRoutes);
 // app.use("/reservation", reservationRoutes);

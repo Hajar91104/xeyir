@@ -81,11 +81,36 @@ const forgotPassword = async (req: Request, res: Response) => {
       to: email, // list of receivers
       subject: "Reset Your Password", // Subject line
       html: `
-              <h1>Reset Your Password</h1>
-              <p>Click <a href="http://localhost:5173/reset-password/${token}">here</a> to reset your password</p>
-              <p>If you didn't request this, please ignore this email</p>
-              <p>Your token will expire in 1 hour</p>
-              <p>Your token is: ${token}</p>
+              
+                <head>
+                  <meta charset="UTF-8">
+                  <title>Reset Your Password</title>
+                </head>
+                <body style="margin:0; padding:0; font-family: Arial, sans-serif;">
+                  <div style="background-color:#f4f4f4; padding:20px;">
+                    <div style="max-width:600px; margin:0 auto; background-color:#ffffff; padding:20px; border-radius:4px;">
+                      <h1 style="text-align:center;">Reset Your Password</h1>
+                      <p style="font-size:16px;">
+                        We received a request to reset your password. If this wasn’t you, please ignore this email.
+                      </p>
+                      <p style="font-size:16px;">
+                        Click 
+                        <a style="color:#1877f2; text-decoration:none;" href="http://localhost:5173/reset-password/${token}">
+                          here
+                        </a> 
+                        to reset your password.
+                      </p>
+                      <p style="font-size:16px;">Your token will expire in 1 hour.</p>
+                      <p style="font-size:16px;">
+                        Your token is: <strong>${token}</strong>
+                      </p>
+                      <p style="font-size:16px;">
+                        Thank you,<br>
+                        The Team
+                      </p>
+                    </div>
+                  </div>
+                </body>
             `,
     });
     res.json({
