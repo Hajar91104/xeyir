@@ -40,7 +40,6 @@ export const getAllCampaignsSchema: Schema = {
     in: ["query"],
     isString: true,
     optional: true,
-    notEmpty: true,
   },
   time_period: {
     in: ["query"],
@@ -88,7 +87,6 @@ export const createCampaignSchema: Schema = {
   currency: {
     in: ["body"],
     isString: true,
-    optional: true,
     notEmpty: true,
   },
   files: {
@@ -143,7 +141,6 @@ export const editCampaignSchema: Schema = {
   currency: {
     in: ["body"],
     isString: true,
-    optional: true,
     notEmpty: true,
   },
 };
