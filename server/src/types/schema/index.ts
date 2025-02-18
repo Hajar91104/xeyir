@@ -1,14 +1,11 @@
-export type Rent = {
+export type Campaign = {
   _id: string;
-  name: string;
-  fuel: number;
-  gearBox: string;
-  price: number;
+  title: string;
   description: string;
-  capacity: number;
+  author: string;
+  goalAmount: number;
   createdAt: string;
   currency: string;
-  discount: number;
   images: string[];
-  showInRecommendation: boolean;
+  // showInRecommendation: boolean;
 };

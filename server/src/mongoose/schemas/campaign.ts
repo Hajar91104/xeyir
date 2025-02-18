@@ -57,6 +57,11 @@ const campaignSchema = new Schema({
     ref: "Donation",
     default: [],
   },
+  status: {
+    type: String,
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
+  },
   //   showInRecommendation: {
   //     type: Boolean,
   //     default: false,

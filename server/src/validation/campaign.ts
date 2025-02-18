@@ -60,11 +60,11 @@ export const createCampaignSchema: Schema = {
     isString: true,
     notEmpty: true,
   },
-  author: {
-    in: ["body"],
-    isString: true,
-    notEmpty: true,
-  },
+  // author: {
+  //   in: ["body"],
+  //   isString: true,
+  //   notEmpty: true,
+  // },
   goalAmount: {
     in: ["body"],
     isNumeric: true,
@@ -80,7 +80,7 @@ export const createCampaignSchema: Schema = {
   //     isBoolean: true,
   //     optional: true,
   //   },
-  location: {
+  locationId: {
     in: ["body"],
     isString: true,
     notEmpty: true,
@@ -113,11 +113,11 @@ export const editCampaignSchema: Schema = {
     isString: true,
     notEmpty: true,
   },
-  author: {
-    in: ["body"],
-    isString: true,
-    notEmpty: true,
-  },
+  // author: {
+  //   in: ["body"],
+  //   isString: true,
+  //   notEmpty: true,
+  // },
   goalAmount: {
     in: ["body"],
     isNumeric: true,
@@ -134,7 +134,7 @@ export const editCampaignSchema: Schema = {
   //     isBoolean: true,
   //     optional: true,
   //   },
-  location: {
+  locationId: {
     in: ["body"],
     isString: true,
     notEmpty: true,
@@ -145,5 +145,15 @@ export const editCampaignSchema: Schema = {
     isString: true,
     optional: true,
     notEmpty: true,
+  },
+};
+export const changeStatusSchema: Schema = {
+  status: {
+    in: ["body"],
+    isString: true,
+    notEmpty: true,
+    isIn: {
+      options: [["approved", "rejected"]],
+    },
   },
 };

@@ -94,20 +94,27 @@ const create = async (req: Request, res: Response) => {
     const {
       title,
       description,
-      author,
-      location,
+      locationId,
       categoryId,
       goalAmount,
       currency,
+      status,
       // showInRecommendation,
     } = req.matchedData;
-    const user = req.user;
 
     const category = await Category.findById(categoryId);
 
     if (!category) {
       res.status(404).json({
         message: "Category not found!",
+      });
+      return;
+    }
+    const location = await Location.findById(locationId);
+
+    if (!location) {
+      res.status(404).json({
+        message: "Location not found!",
       });
       return;
     }
@@ -127,6 +134,7 @@ const create = async (req: Request, res: Response) => {
       goalAmount,
       currency,
       images,
+      status,
       // showInRecommendation,
     });
 
@@ -194,13 +202,20 @@ const edit = async (req: Request, res: Response) => {
     };
 
     // data.dropOffLocations = JSON.parse(req.body.dropOffLocations || "[]");
-    const { categoryId } = data;
+    const { categoryId, locationId } = data;
 
     const category = await Category.findById(categoryId);
+    const location = await Location.findById(locationId);
 
     if (!category) {
       res.status(404).json({
         message: "Category not found!",
+      });
+      return;
+    }
+    if (!location) {
+      res.status(404).json({
+        message: "Location not found!",
       });
       return;
     }
@@ -222,16 +237,26 @@ const edit = async (req: Request, res: Response) => {
 
     const oldCategory = await Category.findByIdAndUpdate(oldCategoryId, {
       $pull: {
-        rents: id,
+        campaigns: id,
       },
     });
     category.campaigns.push(campaign._id);
     await category.save();
 
+    const oldLocationId = campaign.location;
+
+    const oldLocation = await Location.findByIdAndUpdate(oldLocationId, {
+      $pull: {
+        campaigns: id,
+      },
+    });
+    location.campaigns.push(campaign._id);
+    await location.save();
+
     campaign.title = data.title;
     campaign.description = data.description;
     campaign.category = data.categoryId;
-    campaign.location = data.location;
+    campaign.location = data.locationId;
     campaign.goalAmount = data.goalAmount;
     campaign.currency = data.currency;
     campaign.updates = data.update;
@@ -257,14 +282,51 @@ const edit = async (req: Request, res: Response) => {
 const remove = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const campaign = await Campaign.findByIdAndDelete(id);
+    // const data = {
+    //   ...req.matchedData,
+    // };
+    // const { categoryId, locationId } = data;
+    const campaign = await Campaign.findById(id);
 
+    const category = await Category.findById(campaign?.category);
+    const location = await Location.findById(campaign?.location);
+
+    if (!category) {
+      res.status(404).json({
+        message: "Category not found!",
+      });
+      return;
+    }
+    if (!location) {
+      res.status(404).json({
+        message: "Location not found!",
+      });
+      return;
+    }
     if (!campaign) {
       res.status(404).json({
         message: "Not found",
       });
       return;
     }
+
+    const oldCategoryId = campaign.category;
+    const oldCategory = await Category.findByIdAndUpdate(oldCategoryId, {
+      $pull: {
+        campaigns: id,
+      },
+    });
+    await category.save();
+
+    const oldLocationId = campaign.location;
+    const oldLocation = await Location.findByIdAndUpdate(oldLocationId, {
+      $pull: {
+        campaigns: id,
+      },
+    });
+    await location.save();
+
+    await Campaign.findByIdAndDelete(id);
     res.json({
       message: "success",
       item: campaign,
@@ -275,10 +337,42 @@ const remove = async (req: Request, res: Response) => {
     });
   }
 };
+const changeStatus = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.matchedData;
+
+    const campaign = await Campaign.findById(id);
+
+    if (!campaign) {
+      res.status(404).json({ message: "Campaign not found" });
+      return;
+    }
+
+    if (campaign.status === "rejected") {
+      res.status(400).json({
+        message: "Campaign is already rejected",
+      });
+      return;
+    }
+
+    campaign.status = status;
+    await campaign.save();
+
+    res.status(201).json({
+      message: "Campaign status updated successfully",
+      campaign,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 export default {
   getAll,
   getById,
   create,
   edit,
   remove,
+  changeStatus,
 };

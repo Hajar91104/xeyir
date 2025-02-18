@@ -2,6 +2,7 @@ import { Router } from "express";
 import campaignController from "../controllers/campaign";
 import validateSchema from "../middlewares/validator";
 import {
+  changeStatusSchema,
   createCampaignSchema,
   editCampaignSchema,
   getAllCampaignsSchema,
@@ -30,6 +31,12 @@ router.put(
   upload.array("images", 8),
   validateSchema(editCampaignSchema),
   campaignController.edit
+);
+router.patch(
+  "/:id/change-status",
+  authorize({ isAdmin: true }),
+  validateSchema(changeStatusSchema),
+  campaignController.changeStatus
 );
 
 router.delete("/:id", authorize({}), campaignController.remove);

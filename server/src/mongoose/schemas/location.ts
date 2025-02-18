@@ -10,6 +10,12 @@ const locationSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
+  campaigns: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Campaign",
+    },
+  ],
 });
 
 export default mongoose.model("Location", locationSchema);
