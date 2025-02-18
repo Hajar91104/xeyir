@@ -13,11 +13,12 @@ import { Server } from "socket.io";
 // import "./mongoose/schemas/review";
 
 import authRoutes from "./routes/auth";
+import campaignRoutes from "./routes/campaign";
+import categoryRoutes from "./routes/category";
+import commentRoutes from "./routes/comment";
 import locationRoutes from "./routes/location";
-// import categoryRoutes from "./routes/category";
-// import rentRoutes from "./routes/rent";
+import updateRoutes from "./routes/update";
 // import reservationRoutes from "./routes/reservation";
-// import reviewRoutes from "./routes/review";
 // import conversationRoutes from "./routes/conversation";
 // import usersRoutes from "./routes/users.mjs";
 import "./auth/local-strategy";
@@ -57,10 +58,11 @@ app.use(passport.session());
 
 app.use("/auth", authRoutes);
 app.use("/location", locationRoutes);
-// app.use("/category", categoryRoutes);
-// app.use("/rent", rentRoutes);
+app.use("/category", categoryRoutes);
+app.use("/campaign", campaignRoutes);
 // app.use("/reservation", reservationRoutes);
-// app.use("/review", reviewRoutes);
+app.use("/comment", commentRoutes);
+app.use("/update", updateRoutes);
 // app.use("/conversation", conversationRoutes);
 // app.use("/users", usersRoutes);
 app.listen(PORT, () => {
