@@ -28,7 +28,7 @@ export const createNonprofitSchema: Schema = {
   description: {
     in: ["body"],
     isString: true,
-    notEmpty: true,
+    optional: true,
   },
   address: {
     in: ["body"],
@@ -45,7 +45,7 @@ export const createNonprofitSchema: Schema = {
     isNumeric: true,
     notEmpty: true,
   },
-  verififed: {
+  verified: {
     in: ["body"],
     isNumeric: true,
     notEmpty: true,

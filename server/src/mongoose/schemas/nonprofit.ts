@@ -9,6 +9,7 @@ const nonprofitsSchema = new Schema({
   description: {
     type: String,
     default: "",
+    optional: true,
   },
   address: {
     type: String,
@@ -22,7 +23,7 @@ const nonprofitsSchema = new Schema({
     type: Number,
     required: true,
   },
-  verififed: {
+  verified: {
     type: Number,
     required: true,
   },

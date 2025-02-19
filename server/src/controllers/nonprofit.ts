@@ -51,7 +51,7 @@ const create = async (req: Request, res: Response) => {
       address,
       causes,
       established,
-      verififed,
+      verified,
       taxId,
     } = req.matchedData;
 
@@ -63,7 +63,7 @@ const create = async (req: Request, res: Response) => {
       address,
       causes,
       established,
-      verififed,
+      verified,
       taxId,
       images,
     });
