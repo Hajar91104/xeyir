@@ -17,7 +17,7 @@ import campaignRoutes from "./routes/campaign";
 import categoryRoutes from "./routes/category";
 import commentRoutes from "./routes/comment";
 import locationRoutes from "./routes/location";
-import updateRoutes from "./routes/update";
+// import updateRoutes from "./routes/update";
 import nonprofitRoutes from "./routes/nonprofit";
 import donationRoutes from "./routes/donation";
 // import reservationRoutes from "./routes/reservation";
@@ -64,7 +64,7 @@ app.use("/category", categoryRoutes);
 app.use("/campaign", campaignRoutes);
 app.use("/donation", donationRoutes);
 app.use("/comment", commentRoutes);
-app.use("/update", updateRoutes);
+// app.use("/update", updateRoutes);
 app.use("/nonprofit", nonprofitRoutes);
 // app.use("/users", usersRoutes);
 app.listen(PORT, () => {
