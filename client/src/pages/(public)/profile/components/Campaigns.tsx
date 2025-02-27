@@ -110,13 +110,13 @@ const CampaignsSection = () => {
         Campaigns you've contributed so far:
       </h1>
       <div className="grid sm:grid-cols-4 grid-cols-1 gap-3">
-        {fundraisers.map((fundraiser, index) => (
+        {/* {fundraisers.map((fundraiser, index) => (
           <DonationCard
             key={index}
             fundraiser={fundraiser}
             //   className="text-white bg-transparent border-none hover:bg-[#0003]"
           />
-        ))}
+        ))} */}
       </div>
     </div>
   );

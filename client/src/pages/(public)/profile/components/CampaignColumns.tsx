@@ -3,16 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Edit2Icon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
-
-export type Campaign = {
-  id: string;
-  image: string;
-  title: string;
-  description: string;
-  goalAmount: number;
-  currency: string;
-  date: number;
-};
+import { Campaign } from "@/types";
 
 export const campaignColumns: ColumnDef<Campaign>[] = [
   {
@@ -21,7 +12,7 @@ export const campaignColumns: ColumnDef<Campaign>[] = [
     cell: ({ row }) => {
       return (
         <img
-          src={row.original.image}
+          src={row.original.images[0]}
           alt={row.original.title}
           className=" h-[60px] object-cover rounded-lg"
         />
@@ -34,7 +25,7 @@ export const campaignColumns: ColumnDef<Campaign>[] = [
     cell: ({ row }) => {
       return (
         <Link
-          to={`/detail/${row.original.id}`}
+          to={`/detail/${row.original._id}`}
           className="hover:underline font-medium"
         >
           {row.original.title}
@@ -61,7 +52,7 @@ export const campaignColumns: ColumnDef<Campaign>[] = [
     cell: ({ row }) => {
       return (
         <span className="text-nowrap hidden sm:block">
-          {format(row.original.date, "dd.MM.yyyy")}
+          {format(row.original.createdAt, "dd.MM.yyyy")}
         </span>
       );
     },
@@ -84,7 +75,7 @@ export const campaignColumns: ColumnDef<Campaign>[] = [
     cell: (data) => {
       return (
         <div>
-          <Link to={paths.PROFILE.GOFUNDME.EDIT(data.row.original.id)}>
+          <Link to={paths.PROFILE.GOFUNDME.EDIT(data.row.original._id)}>
             <Edit2Icon className="w-4 h-4" />
           </Link>
         </div>

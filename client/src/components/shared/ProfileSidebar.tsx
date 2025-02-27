@@ -11,7 +11,11 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { paths } from "@/constants/paths";
-import Avatar from "@/assets/images/avatar.jpg";
+import Avatar from "@/assets/images/account.png";
+import { useLocation } from "react-router-dom";
+import { useAppSelector } from "@/hooks/redux";
+import { selectUserData } from "@/store/features/userSlice";
+import { format } from "date-fns";
 
 const items = [
   {
@@ -37,6 +41,8 @@ const items = [
 ];
 
 export const ProfileSidebar = () => {
+  const location = useLocation();
+  const { user } = useAppSelector(selectUserData);
   return (
     <Sidebar className=" sticky ">
       <SidebarContent className="p-3">
@@ -51,14 +57,23 @@ export const ProfileSidebar = () => {
                 />
               </div>
               <div>
-                <h1 className="font-semibold text-base">Hajar Mammadova</h1>
-                <p className="text-xs text-secondary">Joined 10.02.2025</p>
+                <h1 className="font-semibold text-base">
+                  {user?.name} {user?.surname}
+                </h1>
+                <p className="text-xs text-secondary">
+                  Joined {format(user?.createdAt!, "dd.MM.yyyy")}
+                </p>
               </div>
             </div>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton
+                    className={` ${
+                      location.pathname === item.url ? "bg-gray-200" : ""
+                    }`}
+                    asChild
+                  >
                     <a href={item.url}>
                       {item.icon}
                       <span className="text-lg">{item.title}</span>

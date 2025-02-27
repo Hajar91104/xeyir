@@ -1,21 +1,31 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 
 import { ProfileSidebar } from "./ProfileSidebar";
 import { paths } from "@/constants/paths";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import {
+  getCurrentUserAsync,
+  selectUserData,
+} from "@/store/features/userSlice";
+import { useEffect } from "react";
 
 export const ProfileLayout = () => {
   const navigate = useNavigate();
-  //   const { user, loading } = useAppSelector(selectUserData);
+  const dispatch = useAppDispatch();
+  const { user, loading } = useAppSelector(selectUserData);
 
-  //   if (loading || user === null) {
-  //     return <div>Loading ...</div>;
-  //   }
+  useEffect(() => {
+    dispatch(getCurrentUserAsync());
+  }, [dispatch]);
 
-  //   if (!user || user.role !== UserRole.Admin) {
-  //     return <Navigate to={paths.HOME} />;
-  //   }
+  if (loading) {
+    return <div>Loading ...</div>;
+  }
 
+  if (!user) {
+    return <Navigate to={paths.HOME} />;
+  }
   return (
     <>
       <div className="bg-white py-4 w-full flex justify-center items-center shadow-md z-50">
