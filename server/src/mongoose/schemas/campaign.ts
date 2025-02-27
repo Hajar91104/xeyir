@@ -47,11 +47,10 @@ const campaignSchema = new Schema({
     ref: "Comment",
     default: [],
   },
-  updates: {
-    type: [Types.ObjectId],
-    ref: "Update",
-    default: [],
-  },
+  // updates: {
+  //   type: String,
+  //   default: "",
+  // },
   donations: {
     type: [Types.ObjectId],
     ref: "Donation",

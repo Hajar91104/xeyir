@@ -3,7 +3,7 @@ import Location from "../mongoose/schemas/location";
 import Campaign from "../mongoose/schemas/campaign";
 import Category from "../mongoose/schemas/category";
 import Comment from "../mongoose/schemas/comment";
-import Update from "../mongoose/schemas/update";
+// import Update from "../mongoose/schemas/update";
 
 const getAll = async (req: Request, res: Response) => {
   try {
@@ -22,9 +22,7 @@ const getAll = async (req: Request, res: Response) => {
       $and: [],
       $or: [],
     };
-    // if (type === "recommended") {
-    //   filter.showInRecommendation = true;
-    // }
+
     if (search) {
       filter.$or.push(
         { name: { $regex: new RegExp(search, "i") } },
@@ -33,49 +31,67 @@ const getAll = async (req: Request, res: Response) => {
     }
 
     if (location) {
-      const locationList = typeof location === "string" ? [location] : location;
+      const locationList = Array.isArray(location) ? location : [location];
       filter.location = { $in: locationList };
     }
 
     if (category) {
-      const categoryList = typeof category === "string" ? [category] : category;
+      const categoryList = Array.isArray(category) ? category : [category];
       filter.category = { $in: categoryList };
     }
 
-    if (time_period) {
-      filter.$and.push({ createdAt: { $lte: time_period } });
+    if (time_period && time_period !== "all") {
+      const now = new Date();
+      let startDate;
+
+      switch (time_period) {
+        case "24h":
+          startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+          break;
+        case "7d":
+          startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          break;
+        case "30d":
+          startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          break;
+        case "12m":
+          startDate = new Date(now.getTime() - 12 * 30 * 24 * 60 * 60 * 1000);
+          break;
+      }
+
+      if (startDate) {
+        filter.$and.push({ createdAt: { $gte: startDate } });
+      }
     }
 
     if (close_to_goal) {
-      filter.closeToGoal = close_to_goal;
+      filter.$and.push({
+        $expr: {
+          $lte: [
+            { $subtract: ["$goalAmount", { $sum: "$donations.amount" }] },
+            50,
+          ],
+        },
+      });
     }
-    // if (dropoff_location) {
-    //   filter.dropOffLocations = {
-    //     $in: [dropoff_location],
-    //   };
 
-    //   if (filter.$and.lenght === 0) {
-    //     delete filter.$and;
-    //   }
-    // }
+    if (filter.$and.length === 0) delete filter.$and;
+    if (filter.$or.length === 0) delete filter.$or;
+
     const items = await Campaign.find(filter)
       .skip(+skip)
       .limit(+take)
-      .populate([
-        "category",
-        "location",
-        "createdAt",
-        "goalAmount",
-        "donations",
-      ]);
+      .populate(["category", "location", "goalAmount", "donations", "author"]);
 
     const total = await Campaign.countDocuments(filter);
+
     items.forEach((item) => {
       item.images = item.images.map(
         (image) => `${process.env.BASE_URL}/public/campaign/${image}`
       );
     });
-    res.status(201).json({
+
+    res.status(200).json({
       message: "success",
       items,
       total,
@@ -83,6 +99,7 @@ const getAll = async (req: Request, res: Response) => {
       skip: +skip,
     });
   } catch (error) {
+    console.error("Error fetching campaigns:", error);
     res.status(500).json({
       message: "Internal server error",
     });
@@ -162,6 +179,7 @@ const getById = async (req: Request, res: Response) => {
     const campaign = await Campaign.findById(id).populate([
       "category",
       "location",
+      // "update",
     ]);
 
     if (!campaign) {
@@ -175,9 +193,9 @@ const getById = async (req: Request, res: Response) => {
       status: "approved",
     }).populate("author", "name surname");
 
-    const updates = await Update.find({
-      campaign: id,
-    }).populate("author", "createdAt");
+    // const updates = await Update.find({
+    //   campaign: id,
+    // }).populate("author", "createdAt");
 
     campaign.images = campaign.images.map(
       (image) => `${process.env.BASE_URL}/public/campaign/${image}`
@@ -185,12 +203,46 @@ const getById = async (req: Request, res: Response) => {
 
     res.json({
       message: "success",
-      item: { ...campaign.toObject(), comments, updates },
+      item: { ...campaign.toObject(), comments },
     });
   } catch (error) {
     res.status(500).json({
       message: "Internal server error",
     });
+  }
+};
+
+const getByUserId = async (req: Request, res: Response) => {
+  try {
+    let { userId } = req.params;
+
+    if (req.isAuthenticated()) {
+      userId = req.user._id.toString();
+    }
+
+    const campaigns = await Campaign.find({
+      author: userId,
+    }).populate(["category", "location", "goalAmount", "donations", "author"]);
+
+    if (!campaigns || campaigns.length === 0) {
+      res.status(404).json({
+        message: "Campaigns not foud",
+      });
+      return;
+    }
+    campaigns.forEach((item) => {
+      item.images = item.images.map(
+        (image) => `${process.env.BASE_URL}/public/campaign/${image}`
+      );
+    });
+
+    res.status(200).json({
+      message: "Campaign fetched successfully!",
+      item: campaigns,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal server error!");
   }
 };
 
@@ -221,7 +273,7 @@ const edit = async (req: Request, res: Response) => {
     }
 
     if (req.files && (req.files as any).length > 0) {
-      data.iamges = (req.files as any).map((file: any) => file.filename);
+      data.images = (req.files as any).map((file: any) => file.filename);
     }
 
     const campaign = await Campaign.findById(id);
@@ -259,7 +311,9 @@ const edit = async (req: Request, res: Response) => {
     campaign.location = data.locationId;
     campaign.goalAmount = data.goalAmount;
     campaign.currency = data.currency;
-    campaign.updates = data.update;
+    // campaign.updates = data.updates;
+    // campaign.updates.push(String(data.updates));
+
     if (data.images) campaign.images = data.images;
     // if (data.showInRecommendation !== undefined)
     //   campaign.showInRecommendation = data.showInRecommendation;
@@ -371,6 +425,7 @@ const changeStatus = async (req: Request, res: Response) => {
 export default {
   getAll,
   getById,
+  getByUserId,
   create,
   edit,
   remove,

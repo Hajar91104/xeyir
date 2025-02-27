@@ -111,10 +111,10 @@ export const editCampaignSchema: Schema = {
     isString: true,
     notEmpty: true,
   },
-  // author: {
+  // updates: {
   //   in: ["body"],
   //   isString: true,
-  //   notEmpty: true,
+  //   optional: true,
   // },
   goalAmount: {
     in: ["body"],
@@ -127,11 +127,6 @@ export const editCampaignSchema: Schema = {
     isString: true,
     notEmpty: true,
   },
-  //   showInRecommendation: {
-  //     in: ["body"],
-  //     isBoolean: true,
-  //     optional: true,
-  //   },
   locationId: {
     in: ["body"],
     isString: true,

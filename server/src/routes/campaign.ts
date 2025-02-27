@@ -18,6 +18,8 @@ router.get(
   campaignController.getAll
 );
 router.get("/:id", campaignController.getById);
+router.get("/user/:userId", campaignController.getByUserId);
+
 router.post(
   "/",
   authorize({}),
