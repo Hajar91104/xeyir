@@ -6,9 +6,57 @@ import { FaApple } from "react-icons/fa";
 import XeyirLogo from "@/assets/images/xeyir-logo.jpg";
 import { useNavigate } from "react-router-dom";
 import { paths } from "@/constants/paths";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import authService from "@/services/auth";
+import { useMutation } from "@tanstack/react-query";
+import { getCurrentUserAsync } from "@/store/features/userSlice";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { AuthResponseType } from "@/services/auth/types";
+import { useAppDispatch } from "@/hooks/redux";
+
+const formSchema = z.object({
+  email: z.string().min(2).max(50),
+  password: z.string().min(2).max(50),
+});
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const dispatch = useAppDispatch();
+  const { mutate, isPending } = useMutation({
+    mutationFn: authService.login,
+    onSuccess: (response) => {
+      toast.success(response.data.message);
+      dispatch(getCurrentUserAsync());
+      navigate(paths.HOME);
+    },
+    onError: (error: AxiosError<AuthResponseType>) => {
+      const message = error.response?.data?.message ?? "An error ocurred";
+      toast.error(message);
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    mutate(values);
+    console.log(values);
+  }
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center"
@@ -49,20 +97,45 @@ export const LoginPage = () => {
             <div className="h-[1px] bg-[#e5e1d7] flex-1" />
           </div>
 
-          <div className="space-y-6">
-            <form className="flex flex-col gap-4">
-              <Input
-                type="email"
-                placeholder="Email Address"
-                className="h-12"
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="name@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <Input type="password" placeholder="Password" className="h-12" />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="********"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                className="w-full h-12 bg-[#252525] hover:bg-[#252525]/90"
+                type="submit"
+                disabled={isPending}
+              >
+                Sign In
+              </Button>
             </form>
-
-            <Button className="w-full h-12 bg-[#252525] hover:bg-[#252525]/90">
-              Continue
-            </Button>
-          </div>
+          </Form>
 
           <p className="text-xs text-[#6b6966] mt-6">
             This site is protected by reCAPTCHA and the Google{" "}
@@ -82,3 +155,6 @@ export const LoginPage = () => {
 };
 
 export default LoginPage;
+// function useAppDispatch() {
+//   throw new Error("Function not implemented.");
+// }

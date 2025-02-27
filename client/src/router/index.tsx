@@ -1,3 +1,4 @@
+import { AuthLayout } from "@/components/shared/AuthLayout";
 import { DashboardLayout } from "@/components/shared/DashboardLayout";
 import { ProfileLayout } from "@/components/shared/ProfileLayout";
 import RootLayout from "@/components/shared/RootLayout";
@@ -35,9 +36,16 @@ export const router = createBrowserRouter([
         path: paths.DETAIL(),
         element: <DetailsPage />,
       },
+
       {
-        path: paths.CHECKOUT(),
-        element: <CheckoutPage />,
+        path: "",
+        element: <AuthLayout />,
+        children: [
+          {
+            path: paths.CHECKOUT(),
+            element: <CheckoutPage />,
+          },
+        ],
       },
     ], // отсюда удалишь
   },

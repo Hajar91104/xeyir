@@ -6,9 +6,65 @@ import { FaApple } from "react-icons/fa";
 import XeyirLogo from "@/assets/images/xeyir-logo.jpg";
 import { useNavigate } from "react-router-dom";
 import { paths } from "@/constants/paths";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import authService from "@/services/auth";
+import { toast } from "sonner";
+import { AuthResponseType } from "@/services/auth/types";
+import { AxiosError } from "axios";
+
+const formSchema = z
+  .object({
+    name: z.string().min(2).max(50),
+    surname: z.string().min(2).max(50),
+    email: z.string().min(2).max(50),
+    password: z.string().min(2).max(50),
+    confirmPassword: z.string().min(2).max(50),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirm"],
+  });
 
 const RegistrationPage = () => {
   const navigate = useNavigate();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      surname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: authService.register,
+    onSuccess: (response) => {
+      toast.success(response.data.message);
+      navigate(paths.LOGIN);
+    },
+    onError: (error: AxiosError<AuthResponseType>) => {
+      console.log(error.response?.data?.message);
+      const message = error.response?.data?.message || "An error ocurred";
+      toast.error(message);
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
+    mutate(values);
+  }
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center"
@@ -49,27 +105,85 @@ const RegistrationPage = () => {
             <div className="h-[1px] bg-[#e5e1d7] flex-1" />
           </div>
 
-          <div className="space-y-6">
-            <form className="flex flex-col gap-4">
-              <Input type="name" placeholder="Name" className="h-12" />
-              <Input type="surname" placeholder="Surname" className="h-12" />
-              <Input
-                type="email"
-                placeholder="Email Address"
-                className="h-12"
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Jane" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <Input type="password" placeholder="Password" className="h-12" />
-              <Input
-                type="cpassword"
-                placeholder="Confirm Password"
-                className="h-12"
+              <FormField
+                control={form.control}
+                name="surname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="name@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="********"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="********"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                className="w-full h-12 bg-[#252525] hover:bg-[#252525]/90"
+                type="submit"
+                disabled={isPending}
+              >
+                Register
+              </Button>
             </form>
-
-            <Button className="w-full h-12 bg-[#252525] hover:bg-[#252525]/90">
-              Continue
-            </Button>
-          </div>
+          </Form>
 
           <p className="text-xs text-[#6b6966] mt-6">
             This site is protected by reCAPTCHA and the Google{" "}

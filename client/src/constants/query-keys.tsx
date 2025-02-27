@@ -1,0 +1,17 @@
+export const QUERY_KEYS = {
+  CAMPAIGN_LIST: "campaignList",
+  PROFILE_CAMPAIGNS: "profileCampaigns",
+  // ADMIN_RENTS: "adminRents",
+  // ADMIN_RESERVATIONS: "adminReservations",
+  // ADMIN_REVIEWS: "adminReviews",
+  ADMIN_CAMPAIGN_DETAIL: "adminCampaignDetail",
+  CATEGORIES: "categories",
+  LOCATIONS: "locations",
+  // RESERVATIONS: "reservations",
+  // RECOMMENDATION_RENTS: "recommendationRents",
+  // RENT_LIST: "rentList",
+  // RENT_DETAIL: "rentDetail",
+  // USER_CONVERSATION: "userConversation",
+  // ADMIN_CONVERSATIONS: "adminConversations",
+  // ADMIN_CHAT: "adminChat",
+};

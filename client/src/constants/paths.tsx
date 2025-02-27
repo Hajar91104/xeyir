@@ -7,7 +7,7 @@ export const paths = {
   REGISTER: "/registration",
   PROFILE: {
     MAIN: "/profile",
-    CONTRIBUTIONS: "/contributions",
+    CONTRIBUTIONS: "/profile/contributions",
     GOFUNDME: {
       LIST: "/profile/gofundme",
       CREATE: "/profile/gofundme/create",
