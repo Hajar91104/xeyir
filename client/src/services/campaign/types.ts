@@ -1,4 +1,4 @@
-import { Campaign } from "@/types";
+import { Campaign, CampaignStatus } from "@/types";
 
 export type GetAllCampaignsResponseType = {
   items: Campaign[];
@@ -23,4 +23,8 @@ export type CampaignRequestPayload = {
   locationId: string;
   currency: string;
   images?: File[];
+};
+export type ChangeStatusRequestPayload = {
+  id: string;
+  status: CampaignStatus.Approved | CampaignStatus.Rejected;
 };

@@ -11,17 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RenderIf } from "@/components/shared/RenderIf";
-
-export type Campaign = {
-  id: string;
-  image: string;
-  title: string;
-  goalAmount: number;
-  amountDonated: number;
-  currency: string;
-  date: number;
-  status: "pending" | "approved" | "rejected";
-};
+import { Campaign, CampaignStatus } from "@/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import campaignService from "@/services/campaign";
+import { toast } from "sonner";
+import { QUERY_KEYS } from "@/constants/query-keys";
 
 export const dashboardCampaignColumns: ColumnDef<Campaign>[] = [
   {
@@ -30,7 +24,7 @@ export const dashboardCampaignColumns: ColumnDef<Campaign>[] = [
     cell: ({ row }) => {
       return (
         <img
-          src={row.original.image}
+          src={row.original.images[0]}
           alt={row.original.title}
           className=" h-[60px] object-cover rounded-lg"
         />
@@ -43,7 +37,7 @@ export const dashboardCampaignColumns: ColumnDef<Campaign>[] = [
     cell: ({ row }) => {
       return (
         <span className="text-nowrap hidden sm:block">
-          {format(row.original.date, "dd.MM.yyyy")}
+          {format(row.original.createdAt, "dd.MM.yyyy")}
         </span>
       );
     },
@@ -54,7 +48,7 @@ export const dashboardCampaignColumns: ColumnDef<Campaign>[] = [
     cell: ({ row }) => {
       return (
         <Link
-          to={`/fundraiser/${row.original.id}`}
+          to={`/fundraiser/${row.original._id}`}
           className="hover:underline font-medium"
         >
           {row.original.title}
@@ -74,18 +68,18 @@ export const dashboardCampaignColumns: ColumnDef<Campaign>[] = [
       );
     },
   },
-  {
-    accessorKey: "amountDonated",
-    header: () => <span className="hidden sm:block">Donated</span>,
+  // {
+  //   accessorKey: "amountDonated",
+  //   header: () => <span className="hidden sm:block">Donated</span>,
 
-    cell: ({ row }) => {
-      return (
-        <span className="hidden sm:block text-nowrap">
-          {row.original.amountDonated.toLocaleString()} {row.original.currency}
-        </span>
-      );
-    },
-  },
+  //   cell: ({ row }) => {
+  //     return (
+  //       <span className="hidden sm:block text-nowrap">
+  //         {row.original.amountDonated.toLocaleString()} {row.original.currency}
+  //       </span>
+  //     );
+  //   },
+  // },
   {
     accessorKey: "status",
     header: "Status",
@@ -99,31 +93,31 @@ export const dashboardCampaignColumns: ColumnDef<Campaign>[] = [
     accessorKey: "",
     header: "Actions",
     cell: (data) => {
-      // const queryClient = useQueryClient();
-      // const { mutate } = useMutation({
-      //   mutationFn: reservationService.changeStatus,
-      //   onSuccess: () => {
-      //     toast.success("Status updated successfully");
-      //     queryClient.invalidateQueries({
-      //       queryKey: [QUERY_KEYS.ADMIN_RESERVATIONS],
-      //     });
-      //   },
-      // });
+      const queryClient = useQueryClient();
+      const { mutate } = useMutation({
+        mutationFn: campaignService.changeStatus,
+        onSuccess: () => {
+          toast.success("Status updated successfully");
+          queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.DASHBOARD_CAMPAIGNS],
+          });
+        },
+      });
       const status = data.row.original.status;
-      // if (
-      //   status !== ReservationStatus.Pending &&
-      //   status !== ReservationStatus.Approved
-      // ) {
-      //   return null;
-      // }
-      // function handleStatusChange(
-      //   status: ReservationStatus.Approved | ReservationStatus.Rejected
-      // ) {
-      //   mutate({
-      //     id: data.row.original._id,
-      //     status,
-      //   });
-      // }
+      if (
+        status !== CampaignStatus.Pending &&
+        status !== CampaignStatus.Approved
+      ) {
+        return null;
+      }
+      function handleStatusChange(
+        status: CampaignStatus.Approved | CampaignStatus.Rejected
+      ) {
+        mutate({
+          id: data.row.original._id,
+          status,
+        });
+      }
       return (
         <div>
           <DropdownMenu>
@@ -135,7 +129,7 @@ export const dashboardCampaignColumns: ColumnDef<Campaign>[] = [
               <DropdownMenuSeparator />
               <RenderIf condition={status === "pending"}>
                 <DropdownMenuItem
-                  // onClick={() => handleStatusChange(ReservationStatus.Approved)}
+                  onClick={() => handleStatusChange(CampaignStatus.Approved)}
                   className="cursor-pointer "
                 >
                   <CheckCircle2Icon className="text-green-600" />
@@ -146,7 +140,7 @@ export const dashboardCampaignColumns: ColumnDef<Campaign>[] = [
                 condition={status === "pending" || status === "approved"}
               >
                 <DropdownMenuItem
-                  // onClick={() => handleStatusChange(ReservationStatus.Rejected)}
+                  onClick={() => handleStatusChange(CampaignStatus.Rejected)}
                   className="cursor-pointer "
                 >
                   <XCircleIcon className="text-red-600" />

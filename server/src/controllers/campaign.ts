@@ -179,6 +179,7 @@ const getById = async (req: Request, res: Response) => {
     const campaign = await Campaign.findById(id).populate([
       "category",
       "location",
+      "author",
       // "update",
     ]);
 

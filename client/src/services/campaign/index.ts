@@ -1,6 +1,7 @@
 import axiosInstance from "../axiosInstance";
 import {
   CampaignRequestPayload,
+  ChangeStatusRequestPayload,
   GetAllCampaignsResponseType,
   GetByIdCampaignResponseType,
   GetByUserIdCampaignResponseType,
@@ -68,6 +69,19 @@ const edit = async (data: CampaignRequestPayload & { id?: string }) => {
   return await axiosInstance.put(`/campaign/${data.id}`, formData);
 };
 
-const campaignService = { getAll, create, getById, getByUserId, edit };
+const changeStatus = async (data: ChangeStatusRequestPayload) => {
+  return await axiosInstance.patch(`/campaign/${data.id}/change-status`, {
+    status: data.status,
+  });
+};
+
+const campaignService = {
+  getAll,
+  create,
+  getById,
+  getByUserId,
+  edit,
+  changeStatus,
+};
 
 export default campaignService;
