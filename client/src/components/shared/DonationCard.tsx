@@ -1,27 +1,23 @@
+import { Campaign } from "@/types";
 import { Card } from "../ui/card";
-
-interface Fundraiser {
-  image: string;
-  title: string;
-  donations: string;
-  currency: string;
-  goalAmount: number;
-  amountRaised: number;
-}
+import { paths } from "@/constants/paths";
+import { useNavigate } from "react-router-dom";
 
 interface DonationCardProps {
-  fundraiser: Fundraiser;
+  fundraiser: Campaign;
   className?: string;
 }
 
 const DonationCard = ({ fundraiser, className = "" }: DonationCardProps) => {
+  const navigate = useNavigate();
   return (
     <Card
+      onClick={() => navigate(paths.DETAIL(fundraiser._id))}
       className={`rounded-xl bg-transparent overflow-hidden cursor-pointer hover:shadow-sm transition-all duration-300 hover:bg-[#fbfaf8] ${className}`}
     >
       <div className="h-[160px] overflow-hidden">
         <img
-          src={fundraiser.image}
+          src={fundraiser.images[0]}
           alt={fundraiser.title}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
         />
@@ -30,9 +26,9 @@ const DonationCard = ({ fundraiser, className = "" }: DonationCardProps) => {
         <h3 className={`font-bold text-xl mb-2 line-clamp-2 ${className}`}>
           {fundraiser.title}
         </h3>
-        {/* <p className="text-sm text-[#6b6966] mb-4">
-                  by {fundraiser.author}
-                </p> */}
+        <p className="text-sm text-[#6b6966] mb-4">
+          by {fundraiser.author.name} {fundraiser.author.surname}
+        </p>
         <div className="w-full rounded-full overflow-hidden bg-[#e5e1d7] mb-2">
           <div
             className="h-2 bg-gradient-to-r from-[#00b65e] to-[#008044] rounded-full"
@@ -44,9 +40,9 @@ const DonationCard = ({ fundraiser, className = "" }: DonationCardProps) => {
             }}
           />
         </div>
-        <p className="font-medium">
+        {/* <p className="font-medium">
           ${fundraiser.amountRaised.toLocaleString()} raised
-        </p>
+        </p> */}
       </div>
     </Card>
   );

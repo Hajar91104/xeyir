@@ -1,141 +1,149 @@
 import { ChevronDown, X } from "lucide-react";
 import { MdOutlineTune } from "react-icons/md";
-import Discover1 from "@/assets/images/discover1.jpg";
-import Discover2 from "@/assets/images/discover2.jpg";
-import Discover3 from "@/assets/images/discover3.jpg";
-import Discover4 from "@/assets/images/discover4.jpg";
-import Discover5 from "@/assets/images/discover5.jpg";
-import Discover6 from "@/assets/images/discover6.jpeg";
-import Discover7 from "@/assets/images/discover7.jpg";
-import Discover8 from "@/assets/images/discover8.jpg";
-import Discover9 from "@/assets/images/discover9.jpg";
-import Discover10 from "@/assets/images/discover10.jpg";
 import SearchIcon from "@/assets/icons/search.svg";
 import { FiDelete } from "react-icons/fi";
 
-import { useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Switch } from "@/components/ui/switch";
 import DonationCard from "@/components/shared/DonationCard";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import locationService from "@/services/location";
+import { IoLocationOutline } from "react-icons/io5";
+import categoryService from "@/services/category";
+import { useSearchParams } from "react-router-dom";
+import { QUERY_KEYS } from "@/constants/query-keys";
+import campaignService from "@/services/campaign";
+import { LIST_TAKE_COUNT } from "@/constants";
+import { Campaign } from "@/types";
+import DonationCardSkeleton from "@/components/shared/CardSkeleton";
 
-interface Fundraiser {
-  image: string;
-  title: string;
-  donations: string;
-  currency: string;
-  //   author: string;
-  amountRaised: number;
-  goalAmount: number;
-}
-
-const SearchedSection = () => {
+export default function SearchedSection() {
   const [visibleItems, setVisibleItems] = useState(8);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedTimePeriod, setSelectedTimePeriod] = useState<string>("all");
   const [isCloseToGoal, setIsCloseToGoal] = useState(false);
-  const [locationSearch, setLocationSearch] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  const fundraisers: Fundraiser[] = [
-    {
-      image: Discover1,
-      title: "Support Jack Grivetti's Recovery",
-      donations: "1.2K",
-      currency: "$",
-      goalAmount: 45000,
-      amountRaised: 65683,
-    },
-    {
-      image: Discover2,
-      title: "UNLEASH THE FURY- For the love of Wes Johnson",
-      donations: "2.9K",
-      currency: "$",
-      goalAmount: 200000,
-      amountRaised: 170481,
-    },
-    {
-      image: Discover3,
-      title: "Support Primrose in Her Fight Against Leukaemia",
-      donations: "1.1K",
-      currency: "£",
-      goalAmount: 3000,
-      amountRaised: 26291,
-    },
-    {
-      image: Discover4,
-      title: "Rebuilding a home - Maureen Folan (McDonagh)",
-      donations: "1.3K ",
-      currency: "€",
-      goalAmount: 100000,
-      amountRaised: 59045,
-    },
-    {
-      image: Discover5,
-      title: "Justice for Mandi: Support Her Family",
-      donations: "726 ",
-      currency: "$",
-      goalAmount: 30000,
-      amountRaised: 48417,
-    },
-    {
-      image: Discover6,
-      title: "Support Tyler and Family in Memory of Kelsey",
-      donations: "1.6K ",
-      currency: "$",
-      goalAmount: 150000,
-      amountRaised: 149770,
-    },
-    {
-      image: Discover7,
-      title: "Ted Spurrell and his road to recovery ❤️",
-      donations: "995 ",
-      currency: "£",
-      goalAmount: 26000,
-      amountRaised: 20640,
-    },
-    {
-      image: Discover8,
-      title: "Viveca Hawkins' Stroke Recovery",
-      donations: "784",
-      currency: "$",
-      goalAmount: 100000,
-      amountRaised: 69207,
-    },
-    {
-      image: Discover9,
-      title: "Support Sidhu's Family After His Sudden Loss",
-      donations: "2.3K",
-      currency: "$",
-      goalAmount: 300000,
-      amountRaised: 118001,
-    },
-    {
-      image: Discover10,
-      title: "In loving memory of Chris & JuJu & support for the Vrbesic's",
-      donations: "1K",
-      currency: "$",
-      goalAmount: 200000,
-      amountRaised: 215745,
-    },
-  ];
+  const [locationSearch, setLocationSearch] = useState("");
+  const [isLocationFocused, setIsLocationFocused] = useState(false);
+  const locationInputRef = useRef<HTMLDivElement>(null);
 
-  const totalResults = 500;
-  const displayedFundraisers = fundraisers.slice(0, visibleItems);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleShowMore = () => {
-    setVisibleItems((prev) => Math.min(prev + 8, fundraisers.length));
+  const { data, isLoading } = useInfiniteQuery({
+    queryKey: [QUERY_KEYS.CAMPAIGN_LIST, searchParams.toString()],
+    queryFn: ({ pageParam }: { pageParam: number }) =>
+      campaignService.getAll(
+        {
+          take: LIST_TAKE_COUNT,
+          skip: pageParam,
+        },
+        searchParams.toString()
+      ),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      const hasNextPage =
+        lastPage.data.total > lastPage.data.skip + lastPage.data.take;
+
+      if (!hasNextPage) return null;
+      return lastPage.data.skip + lastPage.data.take;
+    },
+  });
+
+  const campaigns = useMemo(() => {
+    if (!data) return [];
+    return data.pages.reduce((prev: Campaign[], page) => {
+      return [...prev, ...page.data.items];
+    }, []);
+  }, [data]);
+
+  const { data: locationsResponse } = useQuery({
+    queryKey: ["location"],
+    queryFn: locationService.getAll,
+  });
+  const locationsOptions = useMemo(() => {
+    if (!locationsResponse) return [];
+    return locationsResponse.data.items.map((location: any) => ({
+      value: location._id,
+      label: location.name,
+    }));
+  }, [locationsResponse]);
+
+  const { data: categoryResponse } = useQuery({
+    queryKey: ["category"],
+    queryFn: categoryService.getAll,
+  });
+  const categoriesOptions = useMemo(() => {
+    if (!categoryResponse) return [];
+    return categoryResponse.data.items.map((category: any) => ({
+      value: category._id,
+      label: category.name,
+    }));
+  }, [categoryResponse]);
+
+  const displayedFundraisers = campaigns.filter(
+    (campaign) => campaign.status === "approved"
+  );
+  const totalResults = displayedFundraisers.length;
+
+  function handleChange(type: string, option: string | string[]) {
+    searchParams.delete(type.toLowerCase());
+
+    if (Array.isArray(option)) {
+      option.forEach((v) => {
+        if (v) {
+          searchParams.append(type.toLowerCase(), v);
+        }
+      });
+    } else {
+      if (option) {
+        searchParams.append(type.toLowerCase(), option);
+      }
+    }
+
+    setSearchParams(searchParams);
+  }
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prev) => {
+      const updated = prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category];
+
+      handleChange("category", updated);
+      return updated;
+    });
   };
 
-  const categories = [
-    "Education",
-    "Animals",
-    "Environment",
-    "Business",
-    "Medical",
-    "Funeral",
-    "Emergency",
-    "Community",
-  ];
+  const handleLocationFocus = () => {
+    setIsLocationFocused(true);
+  };
+
+  const handleLocationBlur = (e: MouseEvent) => {
+    if (
+      locationInputRef.current &&
+      !locationInputRef.current.contains(e.target as Node)
+    ) {
+      setIsLocationFocused(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleLocationBlur);
+    return () => {
+      document.removeEventListener("mousedown", handleLocationBlur);
+    };
+  }, []);
+
+  const isLocationActive = locationSearch !== "";
+  const isCategoryActive = selectedCategories.length > 0;
+  const isTimeActive = selectedTimePeriod !== "all";
+
+  const handleShowMore = () => {
+    setVisibleItems((prev) => Math.min(prev + 8, campaigns.length));
+  };
 
   const timePeriods = [
     { id: "all", label: "All time" },
@@ -150,16 +158,14 @@ const SearchedSection = () => {
     setSelectedTimePeriod("all");
     setIsCloseToGoal(false);
     setLocationSearch("");
-  };
+    setSearchText("");
 
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
+    searchParams.delete("location");
+    searchParams.delete("category");
+    searchParams.delete("close_to_goal");
+    searchParams.delete("time_period");
+    setSearchParams(searchParams);
   };
-  const [searchText, setSearchText] = useState("");
 
   const handleClear = () => {
     setSearchText("");
@@ -172,10 +178,6 @@ const SearchedSection = () => {
       setOpenDropdown(dropdown);
     }
   };
-
-  const isLocationActive = locationSearch !== "";
-  const isCategoryActive = selectedCategories.length > 0;
-  const isTimeActive = selectedTimePeriod !== "all";
 
   return (
     <>
@@ -195,7 +197,7 @@ const SearchedSection = () => {
             </button>
           </div>
 
-          <div className="mb-16">
+          <div className="mb-16 relative" ref={locationInputRef}>
             <h3 className="font-bold">Location</h3>
             <p className="text-secondary text-base mb-6">
               Search for any city or zip code worldwide
@@ -207,34 +209,61 @@ const SearchedSection = () => {
                 type="text"
                 placeholder="Search"
                 value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                  handleChange("location", e.target.value);
+                }}
+                onFocus={handleLocationFocus}
               />
               {searchText && (
                 <button
-                  onClick={handleClear}
+                  onClick={() => {
+                    handleClear();
+                    handleChange("location", "");
+                  }}
                   className="rounded-full flex items-center justify-center h-8 w-8 hover:bg-[#2525250d]"
                 >
                   <FiDelete className="h-4 w-4 cursor-pointer text-black" />
                 </button>
               )}
             </div>
+            {isLocationFocused && (
+              <div className="absolute mt-3 bg-white shadow-md p-5 rounded-xl flex flex-col gap-3 w-full">
+                {locationsOptions.map((location) => (
+                  <div
+                    className={
+                      "cursor-pointer p-[0.25rem_0.5rem] flex items-center gap-2 rounded-lg transition-all  duration-300 hover:bg-[#2525250d]"
+                    }
+                    key={location.value}
+                    onClick={() => {
+                      setSearchText(location.label);
+                      handleChange("location", location.value);
+                      setIsLocationFocused(false);
+                    }}
+                  >
+                    <IoLocationOutline />
+                    <p>{location.label}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="mb-16">
             <h3 className="font-semibold mb-2">Category</h3>
             <p className="text-[#6b6966] text-sm mb-2">Choose one or more</p>
             <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
+              {categoriesOptions.map((category) => (
                 <button
-                  key={category}
-                  onClick={() => toggleCategory(category)}
+                  key={category.value}
+                  onClick={() => toggleCategory(category.value)}
                   className={`px-4 py-2 rounded-full border transition-all duration-300 ${
-                    selectedCategories.includes(category)
+                    selectedCategories.includes(category.value)
                       ? "border-[#252525] bg-[#252525] text-white"
                       : "border-[#e5e1d7] hover:bg-[#2525250d]"
                   }`}
                 >
-                  {category}
+                  {category.label}
                 </button>
               ))}
             </div>
@@ -246,19 +275,13 @@ const SearchedSection = () => {
                 <h3 className="font-semibold">Close to goal</h3>
                 <p className="text-[#6b6966] text-sm">$50 or less needed</p>
               </div>
-              {/* <button
-                onClick={() => setIsCloseToGoal(!isCloseToGoal)}
-                className={`w-12 h-6 rounded-full transition-colors duration-300 ${
-                  isCloseToGoal ? "bg-[#252525]" : "bg-[#e5e1d7]"
-                }`}
-              >
-                <div
-                  className={`w-5 h-5 rounded-full bg-white transform transition-transform duration-300 ${
-                    isCloseToGoal ? "translate-x-6" : "translate-x-1"
-                  }`}
-                />
-              </button> */}
-              <Switch />
+              <Switch
+                onClick={() => {
+                  setIsCloseToGoal(!isCloseToGoal);
+                  handleChange("close_to_goal", (!isCloseToGoal).toString());
+                }}
+                checked={isCloseToGoal}
+              />
             </div>
           </div>
 
@@ -268,7 +291,10 @@ const SearchedSection = () => {
               {timePeriods.map((period) => (
                 <button
                   key={period.id}
-                  onClick={() => setSelectedTimePeriod(period.id)}
+                  onClick={() => {
+                    setSelectedTimePeriod(period.id);
+                    handleChange("time_period", period.id);
+                  }}
                   className={`p-[0.25rem_0.5rem] text-left rounded-lg transition-all w-fit duration-300 hover:bg-[#2525250d] ${
                     selectedTimePeriod === period.id ? "font-bold" : ""
                   }`}
@@ -305,7 +331,7 @@ const SearchedSection = () => {
         />
       )}
 
-      <div className=" py-8">
+      <div className="py-8">
         <div className="flex flex-wrap gap-2 mb-8">
           <button
             onClick={() => setShowFilters(true)}
@@ -360,7 +386,10 @@ const SearchedSection = () => {
                   <input
                     type="text"
                     value={locationSearch}
-                    onChange={(e) => setLocationSearch(e.target.value)}
+                    onChange={(e) => {
+                      setLocationSearch(e.target.value);
+                      handleChange("location", e.target.value);
+                    }}
                     placeholder="City or zip code"
                     className="w-full p-3 rounded-lg border border-[#e5e1d7] focus:outline-none focus:border-[#2525250d]"
                   />
@@ -391,17 +420,17 @@ const SearchedSection = () => {
                     Choose one or more
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {categories.map((category) => (
+                    {categoriesOptions.map((cat) => (
                       <button
-                        key={category}
-                        onClick={() => toggleCategory(category)}
+                        key={cat.value}
+                        onClick={() => toggleCategory(cat.value)}
                         className={`px-4 py-2 rounded-full border transition-all duration-300 ${
-                          selectedCategories.includes(category)
+                          selectedCategories.includes(cat.value)
                             ? "border-[#252525] bg-[#252525] text-white"
                             : "border-[#e5e1d7] hover:bg-[#2525250d]"
                         }`}
                       >
-                        {category}
+                        {cat.label}
                       </button>
                     ))}
                   </div>
@@ -433,6 +462,7 @@ const SearchedSection = () => {
                         onClick={() => {
                           setSelectedTimePeriod(period.id);
                           setOpenDropdown(null);
+                          handleChange("time_period", period.id);
                         }}
                         className={`px-4 py-2 text-left rounded-lg transition-all duration-300 ${
                           selectedTimePeriod === period.id
@@ -448,12 +478,22 @@ const SearchedSection = () => {
               )}
             </div>
 
-            <button className="px-4 py-2 rounded-full border border-[#c0bdb8] hover:bg-[#fbfaf8] hover:border-secondary-foreground duration-500">
+            <button
+              className="px-4 py-2 rounded-full border border-[#c0bdb8] hover:bg-[#fbfaf8] hover:border-secondary-foreground duration-500"
+              onClick={() => {
+                /* If you also want to store this in params:
+                 * handleSingleParamChange("nonprofits", "true");
+                 */
+              }}
+            >
               <span className="font-medium text-[14px]">Nonprofits</span>
             </button>
 
             <button
-              onClick={() => setIsCloseToGoal(!isCloseToGoal)}
+              onClick={() => {
+                setIsCloseToGoal(!isCloseToGoal);
+                handleChange("close_to_goal", (!isCloseToGoal).toString());
+              }}
               className={`px-4 py-2 rounded-full border transition-all duration-300 ${
                 isCloseToGoal
                   ? "border-[#252525] bg-[#252525] text-white"
@@ -485,15 +525,19 @@ const SearchedSection = () => {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {displayedFundraisers.map((fundraiser, index) => (
-            <DonationCard fundraiser={fundraiser} key={index} />
-          ))}
+          {isLoading
+            ? Array.from({ length: 8 }).map((_, index) => (
+                <DonationCardSkeleton key={index} />
+              ))
+            : displayedFundraisers.map((fundraiser, index) => (
+                <DonationCard fundraiser={fundraiser} key={index} />
+              ))}
         </div>
         <p className="text-sm font-bold w-full text-center mb-8">
-          Showing {displayedFundraisers.length} of {totalResults}+ results
+          Showing {displayedFundraisers.length} of {totalResults} results
         </p>
 
-        {visibleItems < fundraisers.length && (
+        {visibleItems < campaigns.length && (
           <div className="flex justify-center">
             <button
               onClick={handleShowMore}
@@ -506,6 +550,4 @@ const SearchedSection = () => {
       </div>
     </>
   );
-};
-
-export default SearchedSection;
+}

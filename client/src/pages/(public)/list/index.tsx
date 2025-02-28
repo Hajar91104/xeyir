@@ -3,13 +3,62 @@ import { FiDelete } from "react-icons/fi";
 import { useState } from "react";
 import BrowseLandingPage from "./components/Landing";
 import SearchedSection from "./components/Searched";
+import { useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/constants/query-keys";
+import campaignService from "@/services/campaign";
+import { Spinner } from "@/components/shared/Spinner";
+import nonprofitService from "@/services/nonprofit";
+
+let timeoutId: NodeJS.Timeout;
 
 const BrowsePage = () => {
   const [searchText, setSearchText] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClear = () => {
     setSearchText("");
   };
+  function handleSearch(searchText: string) {
+    clearTimeout(timeoutId);
+    if (!searchText) {
+      searchParams.delete("search");
+      setSearchParams(searchParams);
+      return;
+    }
+    timeoutId = setTimeout(() => {
+      searchParams.set("search", searchText);
+      setSearchParams(searchParams);
+      // if (!isListingPage) navigate(paths.LIST + `?${searchParams.toString()}`);
+    }, 300);
+  }
+
+  const { data: recommendedData, isLoading: recommendedLoading } = useQuery({
+    queryKey: [QUERY_KEYS.CAMPAIGN_LIST],
+    queryFn: () => campaignService.getAll(),
+  });
+  const { data: nonprofitData, isLoading: nonprofitLoading } = useQuery({
+    queryKey: [QUERY_KEYS.NONPROFIT_LIST],
+    queryFn: () => nonprofitService.getAll(),
+  });
+  const campaigns = recommendedData?.data.items;
+  const nonprofits = nonprofitData?.data.items;
+  const recommendedCampaigns = campaigns?.filter(
+    (campaign) => campaign.status === "approved"
+  );
+  if (
+    !recommendedCampaigns ||
+    recommendedLoading ||
+    !nonprofits ||
+    nonprofitLoading
+  ) {
+    return (
+      <div className="flex flex-col p-20 justify-center items-center mt-28">
+        <Spinner />
+        <p>Loading ...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-[64px] container">
@@ -27,7 +76,10 @@ const BrowsePage = () => {
             type="text"
             placeholder="Search"
             value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={(e) => {
+              handleSearch(e.target.value.trim());
+              setSearchText(e.target.value);
+            }}
           />
           {searchText && (
             <button
@@ -39,7 +91,12 @@ const BrowsePage = () => {
           )}
         </div>
       </div>
-      {searchText === "" && <BrowseLandingPage />}
+      {searchText === "" && (
+        <BrowseLandingPage
+          fundraisers={recommendedCampaigns}
+          nonprofits={nonprofits}
+        />
+      )}
       {searchText !== "" && <SearchedSection />}
     </div>
   );

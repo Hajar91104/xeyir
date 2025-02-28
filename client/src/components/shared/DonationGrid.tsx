@@ -1,19 +1,20 @@
+import { Campaign } from "@/types";
 import { Card, CardContent } from "../ui/card";
+import { useNavigate } from "react-router-dom";
+import { paths } from "@/constants/paths";
 
-interface Fundraiser {
-  image: string;
-  title: string;
-  donations: string;
-  currency: string;
-  goalAmount: number;
-  amountRaised: number;
-}
+type Props = {
+  fundraisers: Campaign[];
+};
 
-const DonationGrid = ({ fundraisers }: { fundraisers: Fundraiser[] }) => {
+const DonationGrid = ({ fundraisers }: Props) => {
+  const navigate = useNavigate();
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 lg:grid-rows-2 gap-4">
       {fundraisers.map((fundraiser, index) => (
         <Card
+          onClick={() => navigate(paths.DETAIL(fundraiser._id))}
           key={index}
           className={`rounded-xl overflow-hidden cursor-pointer p-2 hover:bg-[#fbfaf8] ${
             index === 0
@@ -25,13 +26,13 @@ const DonationGrid = ({ fundraisers }: { fundraisers: Fundraiser[] }) => {
             className={`bg-cover relative bg-center transition-transform duration-300 rounded-xl h-[200px] hover:scale-[102%] ${
               index === 0 ? "lg:h-[439px]" : "lg:h-[148px]"
             }`}
-            style={{ backgroundImage: `url(${fundraiser.image})` }}
+            style={{ backgroundImage: `url('${fundraiser.images[0]}')` }}
           >
-            <div className="absolute rounded-xl bg-[#00000080] text-white text-sm left-3 bottom-3 px-2 backdrop-blur-sm">
+            {/* <div className="absolute rounded-xl bg-[#00000080] text-white text-sm left-3 bottom-3 px-2 backdrop-blur-sm">
               <p className="text-sm font-medium">
                 {fundraiser.donations} donations
               </p>
-            </div>
+            </div> */}
           </div>
           <CardContent className="p-4 hover:bg-[#fbfaf8]">
             <h3 className="text-base font-bold mb-2 lg:h-[2.6rem]">
@@ -55,5 +56,4 @@ const DonationGrid = ({ fundraisers }: { fundraisers: Fundraiser[] }) => {
   );
 };
 
-export type { Fundraiser };
 export default DonationGrid;
