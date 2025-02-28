@@ -42,13 +42,13 @@ export const createNonprofitSchema: Schema = {
   },
   established: {
     in: ["body"],
-    isNumeric: true,
+    isString: true,
     notEmpty: true,
   },
   verified: {
     in: ["body"],
-    isNumeric: true,
-    notEmpty: true,
+    isString: true,
+    optional: true,
   },
   taxId: {
     in: ["body"],
@@ -63,6 +63,16 @@ export const createNonprofitSchema: Schema = {
         }
         return true;
       },
+    },
+  },
+};
+export const changeStatusSchema: Schema = {
+  status: {
+    in: ["body"],
+    isString: true,
+    notEmpty: true,
+    isIn: {
+      options: [["verified", "unverified"]],
     },
   },
 };

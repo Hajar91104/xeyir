@@ -20,12 +20,12 @@ const nonprofitsSchema = new Schema({
     required: true,
   },
   established: {
-    type: Number,
+    type: String,
     required: true,
   },
   verified: {
-    type: Number,
-    required: true,
+    type: String,
+    optional: true,
   },
   taxId: {
     type: String,
@@ -34,6 +34,15 @@ const nonprofitsSchema = new Schema({
   images: {
     type: [String],
     required: true,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+  status: {
+    type: String,
+    enum: ["verified", "unverified"],
+    default: "unverified",
   },
 });
 

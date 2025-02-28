@@ -26,7 +26,7 @@ const getAll = async (req: Request, res: Response) => {
     const total = await Nonprofit.countDocuments(filter);
     items.forEach((item) => {
       item.images = item.images.map(
-        (image) => `${process.env.BASE_URL}/public/nonprofit/${image}`
+        (image) => `${process.env.BASE_URL}/public/campaign/${image}`
       );
     });
     res.status(201).json({
@@ -134,10 +134,42 @@ const remove = async (req: Request, res: Response) => {
     });
   }
 };
+const changeStatus = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.matchedData;
+
+    const nonprofit = await Nonprofit.findById(id);
+
+    if (!nonprofit) {
+      res.status(404).json({ message: "Nonprofit not found" });
+      return;
+    }
+
+    if (nonprofit.status === "verified") {
+      res.status(400).json({
+        message: "Nonprofit is already verified",
+      });
+      return;
+    }
+
+    nonprofit.status = status;
+    await nonprofit.save();
+
+    res.status(201).json({
+      message: "Nonprofit status updated successfully",
+      nonprofit,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 export default {
   getAll,
   getById,
   create,
   remove,
+  changeStatus,
 };
