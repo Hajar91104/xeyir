@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { GoTriangleDown } from "react-icons/go";
 import { LuMenu } from "react-icons/lu";
+import { IoIosLogOut } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 
 import { paths } from "@/constants/paths";
@@ -162,8 +163,19 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link to={paths.PROFILE.GOFUNDME.LIST}>Campaigns</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout}>
-                  Logout
+                {user.role === "admin" && (
+                  <DropdownMenuItem>
+                    <Link to={paths.DASHBOARD.MAIN}>Dashboard</Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem
+                  className="bg-gray-100"
+                  onClick={handleLogout}
+                >
+                  <div className="flex items-center gap-1 ">
+                    <IoIosLogOut />
+                    Logout
+                  </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

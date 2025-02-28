@@ -27,7 +27,22 @@ export type Campaign = {
   createdAt: string;
   amountRaised: number; //Donations
   author: User;
+  status: "pending" | "rejected" | "approved";
   // reviews: Review[];
+};
+export type Nonprofit = {
+  _id: string;
+  title: string;
+  description: string;
+  address: string;
+  causes: string;
+  images: string[];
+  established: string;
+  verified?: string;
+  updatedAt: string;
+  createdAt: string;
+  taxId: string;
+  status: "verified" | "unverified";
 };
 export type Category = {
   _id: string;
@@ -93,12 +108,15 @@ export enum UserRole {
   Admin = "admin",
   User = "user",
 }
-// export enum ReservationStatus {
-//   Pending = "pending",
-//   Approved = "approved",
-//   Rejected = "rejected",
-//   Canceled = "canceled",
-// }
+export enum CampaignStatus {
+  Pending = "pending",
+  Approved = "approved",
+  Rejected = "rejected",
+}
+export enum NonprofitStatus {
+  Verified = "verified",
+  Unverified = "unverified",
+}
 // export enum ReviewStatus {
 //   Pending = "pending",
 //   Approved = "approved",

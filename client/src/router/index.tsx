@@ -5,6 +5,9 @@ import RootLayout from "@/components/shared/RootLayout";
 import { paths } from "@/constants/paths";
 import DashboardMain from "@/pages/(dashboard)";
 import CampaignDashboardPage from "@/pages/(dashboard)/Campaign";
+import DashboardNonprofitCreatePage from "@/pages/(dashboard)/create";
+import DashboardNonprofitEditPage from "@/pages/(dashboard)/edit";
+import NonprofitDashboardPage from "@/pages/(dashboard)/Nonprofit";
 import ReviewsDashboardPage from "@/pages/(dashboard)/Reviews";
 import CheckoutPage from "@/pages/(public)/checkout";
 import DetailsPage from "@/pages/(public)/details";
@@ -98,6 +101,18 @@ export const router = createBrowserRouter([
       {
         path: paths.DASHBOARD.REVIEWS.LIST,
         element: <ReviewsDashboardPage />,
+      },
+      {
+        path: paths.DASHBOARD.NONPROFIT.LIST,
+        element: <NonprofitDashboardPage />,
+      },
+      {
+        path: paths.DASHBOARD.NONPROFIT.CREATE,
+        element: <DashboardNonprofitCreatePage />,
+      },
+      {
+        path: paths.DASHBOARD.NONPROFIT.EDIT(),
+        element: <DashboardNonprofitEditPage />,
       },
     ],
   },

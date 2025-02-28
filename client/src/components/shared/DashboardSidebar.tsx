@@ -1,6 +1,7 @@
 import { TbHomeHeart } from "react-icons/tb";
 import { PiHandHeartLight } from "react-icons/pi";
 import { MdOutlineCampaign } from "react-icons/md";
+import { BsClipboardHeart } from "react-icons/bs";
 import {
   Sidebar,
   SidebarContent,
@@ -24,6 +25,11 @@ const items = [
     title: "Campaigns",
     url: paths.DASHBOARD.GOFUNDME.LIST,
     icon: <PiHandHeartLight size={20} />,
+  },
+  {
+    title: "Nonprofits",
+    url: paths.DASHBOARD.NONPROFIT.LIST,
+    icon: <BsClipboardHeart size={20} />,
   },
   {
     title: "Reviews",
