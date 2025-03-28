@@ -25,10 +25,10 @@ export type Campaign = {
   currency: string;
   images: string[];
   createdAt: string;
-  amountRaised: number; //Donations
+  donations: Donation[]; //Donations
   author: User;
   status: "pending" | "rejected" | "approved";
-  // reviews: Review[];
+  comments: Comment[];
 };
 export type Nonprofit = {
   _id: string;
@@ -43,6 +43,18 @@ export type Nonprofit = {
   createdAt: string;
   taxId: string;
   status: "verified" | "unverified";
+};
+export type Donation = {
+  _id: string;
+  campaign: Campaign;
+  user: User;
+  amount: number;
+  tip: number;
+  total: number;
+  isAnonymous: boolean;
+  createdAt: string;
+  comment: Comment;
+  hasComment: boolean;
 };
 export type Category = {
   _id: string;
@@ -71,16 +83,16 @@ export type Category = {
 //   _id: string;
 //   hasReview: boolean;
 // };
-// export type Review = {
-//   author: User;
-//   content: string;
-//   createdAt: string;
-//   id: string;
-//   rating: number;
-//   // rent: Rent;
-//   status: ReviewStatus;
-//   _id: string;
-// };
+export type Comment = {
+  author: User;
+  content: string;
+  createdAt: string;
+  // id: string;
+  donation: Donation;
+  campaign: Campaign;
+  status: CommentStatus;
+  _id: string;
+};
 // export type Conversation = {
 //   userName: string;
 //   userEmail: string;
@@ -109,6 +121,11 @@ export enum UserRole {
   User = "user",
 }
 export enum CampaignStatus {
+  Pending = "pending",
+  Approved = "approved",
+  Rejected = "rejected",
+}
+export enum CommentStatus {
   Pending = "pending",
   Approved = "approved",
   Rejected = "rejected",

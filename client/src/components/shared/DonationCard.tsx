@@ -10,6 +10,10 @@ interface DonationCardProps {
 
 const DonationCard = ({ fundraiser, className = "" }: DonationCardProps) => {
   const navigate = useNavigate();
+  const totalRaised =
+    fundraiser.donations?.reduce((acc, donation) => {
+      return acc + donation.amount;
+    }, 0) ?? 0;
   return (
     <Card
       onClick={() => navigate(paths.DETAIL(fundraiser._id))}
@@ -17,7 +21,11 @@ const DonationCard = ({ fundraiser, className = "" }: DonationCardProps) => {
     >
       <div className="h-[160px] overflow-hidden">
         <img
-          src={fundraiser.images[0]}
+          src={
+            fundraiser.images[0]?.startsWith("http")
+              ? fundraiser.images[0]
+              : `http://localhost:3000/public/campaign/${fundraiser.images[0]}`
+          }
           alt={fundraiser.title}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
         />
@@ -34,15 +42,13 @@ const DonationCard = ({ fundraiser, className = "" }: DonationCardProps) => {
             className="h-2 bg-gradient-to-r from-[#00b65e] to-[#008044] rounded-full"
             style={{
               width: `${Math.min(
-                (fundraiser.amountRaised / fundraiser.goalAmount) * 100,
+                (totalRaised / fundraiser.goalAmount) * 100,
                 100
               )}%`,
             }}
           />
         </div>
-        {/* <p className="font-medium">
-          ${fundraiser.amountRaised.toLocaleString()} raised
-        </p> */}
+        <p className="font-medium">${totalRaised.toLocaleString()} raised</p>
       </div>
     </Card>
   );

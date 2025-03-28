@@ -8,6 +8,7 @@ import campaignService from "@/services/campaign";
 import { QUERY_KEYS } from "@/constants/query-keys";
 import { useAppSelector } from "@/hooks/redux";
 import { selectUserData } from "@/store/features/userSlice";
+import { Spinner } from "@/components/shared/Spinner";
 
 const CampaignPage = () => {
   const navigate = useNavigate();
@@ -19,13 +20,13 @@ const CampaignPage = () => {
   });
   console.log(data);
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex justify-center">
-  //       <Spinner />
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="flex justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   if (isError) {
     return <div>Something went wrong...</div>;

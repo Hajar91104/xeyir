@@ -176,12 +176,23 @@ const getById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const campaign = await Campaign.findById(id).populate([
-      "category",
-      "location",
-      "author",
-      // "update",
-    ]);
+    const campaign = await Campaign.findById(id)
+      .populate({
+        path: "donations",
+        select: "user amount",
+        populate: {
+          path: "user",
+          select: "name surname",
+        },
+      })
+      .populate({
+        path: "comments",
+        select: "content createdAt",
+        populate: {
+          path: "author",
+          select: "name surname",
+        },
+      });
 
     if (!campaign) {
       res.status(404).json({
