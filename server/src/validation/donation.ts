@@ -6,11 +6,11 @@ export const createDonationSchema: Schema = {
     isString: true,
     notEmpty: true,
   },
-  user: {
-    in: ["body"],
-    isString: true,
-    notEmpty: true,
-  },
+  // user: {
+  //   in: ["body"],
+  //   isString: true,
+  //   notEmpty: true,
+  // },
   amount: {
     in: ["body"],
     isNumeric: true,
@@ -21,25 +21,9 @@ export const createDonationSchema: Schema = {
     isNumeric: true,
     // notEmpty: true,
   },
-
-  billingName: {
+  isAnonymous: {
     in: ["body"],
-    isString: true,
-    notEmpty: true,
-  },
-  billingPhoneNumber: {
-    in: ["body"],
-    isString: true,
-    notEmpty: true,
-  },
-  billingAddress: {
-    in: ["body"],
-    isString: true,
-    notEmpty: true,
-  },
-  billingTownCity: {
-    in: ["body"],
-    isString: true,
-    notEmpty: true,
+    isBoolean: true,
+    default: false,
   },
 };

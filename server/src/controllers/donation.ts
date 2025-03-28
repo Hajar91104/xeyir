@@ -1,34 +1,19 @@
 import { Request, Response } from "express";
 import Donation from "../mongoose/schemas/donation";
 import Campaign from "../mongoose/schemas/campaign";
-// import { calculateDateDifference } from "../utils/date";
-import { Campaign as TCampaign } from "../types/schema";
 
 const getAll = async (req: Request, res: Response) => {
   try {
-    const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
+    // const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
     const user = req.user;
     const filter: Record<string, string> = {};
     if (user?.role !== "admin") {
       filter.user = user?._id.toString() ?? "";
     }
-    const donations = await Donation.find(filter).populate(
+    const donations = await Donation.find(filter).populate([
       "campaign",
-      "images goalAmount currency title description"
-    );
-    // .populate("dropOffLocations")
-    // .populate("pickUpLocation");
-
-    donations.forEach((donation) => {
-      (donation.campaign as TCampaign).images = (
-        donation.campaign as TCampaign
-      ).images.map((image) => {
-        const validImage = image ?? "";
-        return validImage.startsWith(BASE_URL)
-          ? validImage
-          : `${BASE_URL}/public/rent/${validImage}`;
-      });
-    });
+      "user",
+    ]);
 
     res.json({
       message: "Donations fetched successfully!",
@@ -42,53 +27,91 @@ const getAll = async (req: Request, res: Response) => {
     });
   }
 };
+const getByUserId = async (req: Request, res: Response) => {
+  try {
+    let { userId } = req.params;
+
+    if (req.isAuthenticated()) {
+      userId = req.user._id.toString();
+    }
+
+    const donations = await Donation.find({
+      user: userId,
+    })
+      .populate("user")
+      .populate({
+        path: "campaign",
+        select: "donations images author category",
+        populate: [
+          {
+            path: "donations",
+            select: "amount tip",
+          },
+          {
+            path: "author",
+            select: "name surname",
+          },
+          {
+            path: "category",
+            select: "name",
+          },
+        ],
+      });
+
+    if (!donations || donations.length === 0) {
+      res.status(404).json({
+        message: "Donations not foud",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      message: "Donations fetched successfully!",
+      item: donations,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal server error!");
+  }
+};
 const create = async (req: Request, res: Response) => {
   try {
-    const {
-      campaignId,
-      amount,
-      tip,
-      billingAddress,
-      billingName,
-      billingPhoneNumber,
-      billingTownCity,
-    } = req.matchedData;
-    const campaign = await Campaign.findById(campaignId);
-    if (!campaign) {
+    const { campaign, amount, tip, isAnonymous } = req.body;
+
+    const campaignn = await Campaign.findById(campaign);
+    if (!campaignn) {
       res.status(404).json({ message: "Campaign not found" });
       return;
     }
 
-    // const dateCount = calculateDateDifference(startDate, endDate);
-    const total = amount + tip;
+    const total = amount + (tip || 0);
+
     const donation = new Donation({
-      campaign: campaignId,
+      campaign: campaignn._id,
       user: req.user?._id,
       amount,
-      tip,
-      billing: {
-        name: billingName,
-        address: billingAddress,
-        phoneNumber: billingPhoneNumber,
-        townCity: billingTownCity,
-      },
+      tip: tip || 0,
+      isAnonymous,
       total,
     });
+
     await donation.save();
+
+    campaignn.donations.push(donation._id);
+    await campaignn.save();
+
     res.json({
       message: "Donation created successfully",
       item: donation,
     });
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: "Internal server error",
-    });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 export default {
   getAll,
   create,
+  getByUserId,
 };

@@ -13,5 +13,6 @@ router.post(
   validateSchema(createDonationSchema),
   donationController.create
 );
+router.get("/user/:userId", donationController.getByUserId);
 
 export default router;

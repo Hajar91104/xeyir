@@ -21,24 +21,9 @@ const donationSchema = new Schema({
     type: Number,
     optional: true,
   },
-
-  billing: {
-    name: {
-      type: String,
-      required: true,
-    },
-    phoneNumber: {
-      type: String,
-      required: true,
-    },
-    address: {
-      type: String,
-      required: true,
-    },
-    townCity: {
-      type: String,
-      required: true,
-    },
+  isAnonymous: {
+    type: Boolean,
+    default: false,
   },
   hasComment: {
     type: Boolean,
@@ -48,10 +33,6 @@ const donationSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  // updatedAt: {
-  //   type: Date,
-  //   default: Date.now,
-  // },
 });
 
 donationSchema.set("toJSON", {
