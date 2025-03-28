@@ -7,7 +7,9 @@ const getAll = async (req: Request, res: Response) => {
   try {
     const comments = await Comment.find()
       .populate("author")
-      .populate("campaign");
+      .populate("campaign")
+      .populate("donation");
+
     res.status(200).json({
       message: "Comments fetched successfully",
       items: comments,
@@ -17,56 +19,93 @@ const getAll = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-const getByRentId = async (req: Request, res: Response) => {
+const getByUserId = async (req: Request, res: Response) => {
   try {
-    const { campaignId } = req.params;
+    let { userId } = req.params;
+
+    if (req.isAuthenticated()) {
+      userId = req.user._id.toString();
+    }
 
     const comments = await Comment.find({
-      campaign: campaignId,
-      status: "approved",
-    }).populate("author");
+      user: userId,
+    }).populate(["campaign", "author", "donation"]);
+
+    if (!comments || comments.length === 0) {
+      res.status(404).json({
+        message: "Comments not foud",
+      });
+      return;
+    }
+
     res.status(200).json({
       message: "Comments fetched successfully!",
-      items: comments,
+      item: comments,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).send("Internal server error!");
   }
 };
+const getByDonationId = async (req: Request, res: Response) => {
+  try {
+    const { donationId } = req.matchedData;
+
+    const comments = await Comment.find({
+      donation: donationId,
+    }).populate(["campaign", "author", "donation"]);
+
+    if (!comments || comments.length === 0) {
+      res.status(404).json({
+        message: "Donations not foud",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      message: "Comments fetched successfully!",
+      item: comments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal server error!");
+  }
+};
+
 const create = async (req: Request, res: Response) => {
   try {
     const user = req.user;
-    const { donationId, campaignId, content } = req.matchedData;
-    const donation = await Donation.findById(donationId);
+    const { campaign, donation, content } = req.matchedData;
+    const donationn = await Donation.findById(donation);
 
-    if (!donation) {
+    if (!donationn) {
       res.status(404).json({ message: "Donation not found" });
       return;
     }
 
-    if (donation.hasComment) {
+    if (donationn.hasComment) {
       res.status(400).json({ message: "Donation already has a comment" });
       return;
     }
-    const campaign = await Campaign.findById(campaignId);
+    const campaignn = await Campaign.findById(campaign);
 
-    if (!campaign) {
+    if (!campaignn) {
       res.status(404).json({ message: "Campaign not found" });
       return;
     }
 
     const comment = await Comment.create({
       author: user!._id,
-      campaign: campaignId,
+      donation: donationn._id,
+      campaign: campaignn._id,
       content,
     });
 
-    donation.hasComment = true;
-    await donation.save();
+    donationn.hasComment = true;
+    await donationn.save();
 
-    campaign.comments.push(comment._id);
-    await campaign.save();
+    campaignn.comments.push(comment._id);
+    await campaignn.save();
 
     res.status(201).json({
       message: "Review created successfully",
@@ -104,7 +143,8 @@ const changeStatus = async (req: Request, res: Response) => {
 
 export default {
   getAll,
-  getByRentId,
+  getByUserId,
   create,
   changeStatus,
+  getByDonationId,
 };

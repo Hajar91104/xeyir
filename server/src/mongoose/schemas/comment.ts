@@ -12,6 +12,11 @@ const commentSchema = new Schema({
     ref: "Campaign",
     required: true,
   },
+  donation: {
+    type: Types.ObjectId,
+    ref: "Donation",
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -22,7 +27,7 @@ const commentSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "approved", "rejected", "canceled"],
+    enum: ["pending", "approved", "rejected"],
     default: "pending",
   },
 });

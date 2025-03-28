@@ -1,23 +1,15 @@
 import { Schema } from "express-validator";
 
-export const createReviewSchema: Schema = {
-  reservationId: {
+export const createCommentSchema: Schema = {
+  campaign: {
     in: ["body"],
     isString: true,
     notEmpty: true,
   },
-  rentId: {
+  donation: {
     in: ["body"],
     isString: true,
     notEmpty: true,
-  },
-  rating: {
-    in: ["body"],
-    isInt: true,
-    notEmpty: true,
-    isLength: {
-      options: { min: 1, max: 5 },
-    },
   },
   content: {
     in: ["body"],
