@@ -11,27 +11,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RenderIf } from "@/components/shared/RenderIf";
+import { Comment, CommentStatus } from "@/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import commentService from "@/services/comment";
+import { toast } from "sonner";
+import { QUERY_KEYS } from "@/constants/query-keys";
 
-export type Review = {
-  id: string;
-  campaign: string;
-  author: string;
-  content: string;
-  date: number;
-  status: "pending" | "approved" | "rejected";
-};
-
-export const dashboardReviewsColumns: ColumnDef<Review>[] = [
+export const dashboardReviewsColumns: ColumnDef<Comment>[] = [
   {
     accessorKey: "campaign",
     header: "Campaign",
     cell: ({ row }) => {
       return (
         <Link
-          to={`/detail/${row.original.id}`}
+          to={`/detail/${row.original.campaign._id}`}
           className="hover:underline font-medium"
         >
-          {row.original.campaign}
+          {row.original.campaign.title}
         </Link>
       );
     },
@@ -39,10 +35,20 @@ export const dashboardReviewsColumns: ColumnDef<Review>[] = [
   {
     accessorKey: "author",
     header: "Author",
+    cell: ({ row }) => {
+      return (
+        <span>
+          {row.original.author.name} {row.original.author.surname}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "content",
     header: "Content",
+    cell: ({ row }) => {
+      return <span>{row.original.content}</span>;
+    },
   },
   {
     accessorKey: "date",
@@ -50,7 +56,7 @@ export const dashboardReviewsColumns: ColumnDef<Review>[] = [
     cell: ({ row }) => {
       return (
         <span className="text-nowrap hidden sm:block">
-          {format(row.original.date, "dd.MM.yyyy")}
+          {format(row.original.createdAt, "dd.MM.yyyy")}
         </span>
       );
     },
@@ -68,31 +74,28 @@ export const dashboardReviewsColumns: ColumnDef<Review>[] = [
     accessorKey: "",
     header: "Actions",
     cell: (data) => {
-      // const queryClient = useQueryClient();
-      // const { mutate } = useMutation({
-      //   mutationFn: reservationService.changeStatus,
-      //   onSuccess: () => {
-      //     toast.success("Status updated successfully");
-      //     queryClient.invalidateQueries({
-      //       queryKey: [QUERY_KEYS.ADMIN_RESERVATIONS],
-      //     });
-      //   },
-      // });
+      const queryClient = useQueryClient();
+      const { mutate } = useMutation({
+        mutationFn: commentService.changeStatus,
+        onSuccess: () => {
+          toast.success("Status updated successfully");
+          queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.DASHBOARD_COMMENTS],
+          });
+        },
+      });
       const status = data.row.original.status;
-      // if (
-      //   status !== ReservationStatus.Pending &&
-      //   status !== ReservationStatus.Approved
-      // ) {
-      //   return null;
-      // }
-      // function handleStatusChange(
-      //   status: ReservationStatus.Approved | ReservationStatus.Rejected
-      // ) {
-      //   mutate({
-      //     id: data.row.original._id,
-      //     status,
-      //   });
-      // }
+      if (status !== CommentStatus.Pending) {
+        return null;
+      }
+      function handleStatusChange(
+        status: CommentStatus.Approved | CommentStatus.Rejected
+      ) {
+        mutate({
+          id: data.row.original._id,
+          status,
+        });
+      }
       return (
         <div>
           <DropdownMenu>
@@ -104,7 +107,7 @@ export const dashboardReviewsColumns: ColumnDef<Review>[] = [
               <DropdownMenuSeparator />
               <RenderIf condition={status === "pending"}>
                 <DropdownMenuItem
-                  // onClick={() => handleStatusChange(ReservationStatus.Approved)}
+                  onClick={() => handleStatusChange(CommentStatus.Approved)}
                   className="cursor-pointer "
                 >
                   <CheckCircle2Icon className="text-green-600" />
@@ -115,7 +118,7 @@ export const dashboardReviewsColumns: ColumnDef<Review>[] = [
                 condition={status === "pending" || status === "approved"}
               >
                 <DropdownMenuItem
-                  // onClick={() => handleStatusChange(ReservationStatus.Rejected)}
+                  onClick={() => handleStatusChange(CommentStatus.Rejected)}
                   className="cursor-pointer "
                 >
                   <XCircleIcon className="text-red-600" />

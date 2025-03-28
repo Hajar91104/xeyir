@@ -11,7 +11,7 @@ export const AuthLayout = () => {
   }
 
   if (!user) {
-    return <Navigate to={paths.HOME} />;
+    return <Navigate to={paths.LOGIN} />;
   }
 
   return <Outlet />;

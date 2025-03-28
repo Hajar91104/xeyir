@@ -48,7 +48,7 @@ export const dashboardCampaignColumns: ColumnDef<Campaign>[] = [
     cell: ({ row }) => {
       return (
         <Link
-          to={`/fundraiser/${row.original._id}`}
+          to={`/detail/${row.original._id}`}
           className="hover:underline font-medium"
         >
           {row.original.title}
@@ -104,10 +104,7 @@ export const dashboardCampaignColumns: ColumnDef<Campaign>[] = [
         },
       });
       const status = data.row.original.status;
-      if (
-        status !== CampaignStatus.Pending &&
-        status !== CampaignStatus.Approved
-      ) {
+      if (status !== CampaignStatus.Pending) {
         return null;
       }
       function handleStatusChange(

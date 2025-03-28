@@ -1,5 +1,11 @@
-import { Bar, BarChart, XAxis } from "recharts";
-
+import {
+  Bar,
+  BarChart,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import {
   Card,
   CardContent,
@@ -7,72 +13,58 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-const chartData = [
-  { date: "2024-07-15", running: 450, swimming: 300 },
-  { date: "2024-07-16", running: 380, swimming: 420 },
-  { date: "2024-07-17", running: 520, swimming: 120 },
-  { date: "2024-07-18", running: 140, swimming: 550 },
-  { date: "2024-07-19", running: 600, swimming: 350 },
-  { date: "2024-07-20", running: 480, swimming: 400 },
-];
-
-const chartConfig = {
-  running: {
-    label: "Running",
-    color: "hsl(var(--chart-1))",
-  },
-  swimming: {
-    label: "Swimming",
-    color: "hsl(var(--chart-2))",
-  },
-} satisfies ChartConfig;
+import { useQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/constants/query-keys";
+import donationService from "@/services/donation";
+import { Spinner } from "@/components/shared/Spinner";
 
 export function StatisticsComponent() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: [QUERY_KEYS.DASHBOARD_DONATIONS],
+    queryFn: () => donationService.getAll(),
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center p-6">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center text-red-500">Something went wrong...</div>
+    );
+  }
+
+  const donations = data?.data?.items || [];
+
+  const chartData = donations.map((donation) => ({
+    date: new Date(donation.createdAt).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    }),
+    amount: donation.amount,
+    tip: donation.tip || 0,
+  }));
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Donations</CardTitle>
-        <CardDescription>Donations by category.</CardDescription>
+        <CardTitle>Donation Statistics</CardTitle>
+        <CardDescription>Amount donated per day.</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => {
-                return new Date(value).toLocaleDateString("en-US", {
-                  weekday: "short",
-                });
-              }}
-            />
-            <Bar
-              dataKey="running"
-              stackId="a"
-              fill="var(--color-running)"
-              radius={[0, 0, 4, 4]}
-            />
-            <Bar
-              dataKey="swimming"
-              stackId="a"
-              fill="var(--color-swimming)"
-              radius={[4, 4, 0, 0]}
-            />
-            <ChartTooltip
-              content={<ChartTooltipContent />}
-              cursor={false}
-              defaultIndex={1}
-            />
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={chartData}>
+            <XAxis dataKey="date" tick={{ fill: "#6b7280" }} />
+            <YAxis tick={{ fill: "#6b7280" }} />
+            <Tooltip cursor={{ fill: "rgba(0, 0, 0, 0.1)" }} />
+            <Bar dataKey="amount" fill="var(--primary)" radius={[5, 5, 0, 0]} />
+            <Bar dataKey="tip" fill="var(--secondary)" radius={[5, 5, 0, 0]} />
           </BarChart>
-        </ChartContainer>
+        </ResponsiveContainer>
       </CardContent>
     </Card>
   );

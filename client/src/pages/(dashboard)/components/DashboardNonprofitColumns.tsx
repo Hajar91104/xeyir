@@ -1,7 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { CheckCircle2Icon, Edit2Icon } from "lucide-react";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -113,9 +112,7 @@ export const dashboardNonprofitColumns: ColumnDef<Nonprofit>[] = [
         },
       });
       const status = data.row.original.status;
-      // if (status !== NonprofitStatus.Unverified) {
-      //   return null;
-      // }
+
       function handleStatusChange(
         status: NonprofitStatus.Verified | NonprofitStatus.Unverified
       ) {
