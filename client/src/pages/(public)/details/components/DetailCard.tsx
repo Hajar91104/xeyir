@@ -43,7 +43,7 @@ const DetailCard = ({ campaign }: Props) => {
           </div>
 
           <div className="lg:hidden block lg:w-[367px]">
-            <DonateInfo />
+            <DonateInfo campaign={campaign} id={campaign._id} />
           </div>
 
           <div className="flex items-center py-4 border-y border-grey ">
@@ -79,7 +79,7 @@ const DetailCard = ({ campaign }: Props) => {
 
           <div className="pt-12 pb-10 flex flex-col ">
             <h1 className="text-2xl font-semibold mb-6 ">
-              Words of Support (11)
+              Words of Support ({campaign.comments.length})
             </h1>
             <p className="text-base font-normal text-secondary mb-8">
               Please donate to share words of support.
@@ -99,7 +99,7 @@ const DetailCard = ({ campaign }: Props) => {
         </div>
 
         <div className="hidden lg:block lg:w-[367px]">
-          <DonateInfo />
+          <DonateInfo campaign={campaign} id={campaign._id} />
         </div>
       </div>
     </div>
