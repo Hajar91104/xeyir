@@ -21,7 +21,7 @@ export const QUERY_KEYS = {
   // RECOMMENDATION_RENTS: "recommendationRents",
   // RENT_LIST: "rentList",
   CAMPAIGN_DETAIL: "campaignDetail",
-  // USER_CONVERSATION: "userConversation",
-  // ADMIN_CONVERSATIONS: "adminConversations",
-  // ADMIN_CHAT: "adminChat",
+  USER_CONVERSATION: "userConversation",
+  ADMIN_CONVERSATIONS: "adminConversations",
+  ADMIN_CHAT: "adminChat",
 };

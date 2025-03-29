@@ -21,10 +21,10 @@ import locationRoutes from "./routes/location";
 import nonprofitRoutes from "./routes/nonprofit";
 import donationRoutes from "./routes/donation";
 // import reservationRoutes from "./routes/reservation";
-// import conversationRoutes from "./routes/conversation";
+import conversationRoutes from "./routes/conversation";
 // import usersRoutes from "./routes/users.mjs";
 import "./auth/local-strategy";
-// import { connectSocket } from "./socket";
+import { connectSocket } from "./socket";
 
 // import "./mongoose/schemas/message";
 
@@ -33,8 +33,8 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 const app = express();
-// const server = createServer(app);
-// connectSocket(server);
+const server = createServer(app);
+connectSocket(server);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -64,10 +64,11 @@ app.use("/category", categoryRoutes);
 app.use("/campaign", campaignRoutes);
 app.use("/donation", donationRoutes);
 app.use("/comment", commentRoutes);
+app.use("/conversation", conversationRoutes);
 // app.use("/update", updateRoutes);
 app.use("/nonprofit", nonprofitRoutes);
 // app.use("/users", usersRoutes);
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
