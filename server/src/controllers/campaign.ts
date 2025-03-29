@@ -3,7 +3,6 @@ import Location from "../mongoose/schemas/location";
 import Campaign from "../mongoose/schemas/campaign";
 import Category from "../mongoose/schemas/category";
 import Comment from "../mongoose/schemas/comment";
-// import Update from "../mongoose/schemas/update";
 
 const getAll = async (req: Request, res: Response) => {
   try {
@@ -116,7 +115,6 @@ const create = async (req: Request, res: Response) => {
       goalAmount,
       currency,
       status,
-      // showInRecommendation,
     } = req.matchedData;
 
     const category = await Category.findById(categoryId);
@@ -136,10 +134,6 @@ const create = async (req: Request, res: Response) => {
       return;
     }
 
-    // const images =
-    //   (req.files as any)?.map((file: any) => {
-    //     file.filename;
-    //   }) || [];
     const images = (req.files as any)?.map((file: any) => file.filename) || [];
 
     const campaign = new Campaign({
@@ -152,7 +146,6 @@ const create = async (req: Request, res: Response) => {
       currency,
       images,
       status,
-      // showInRecommendation,
     });
 
     await campaign.save();
@@ -204,10 +197,6 @@ const getById = async (req: Request, res: Response) => {
       campaign: id,
       status: "approved",
     }).populate("author", "name surname");
-
-    // const updates = await Update.find({
-    //   campaign: id,
-    // }).populate("author", "createdAt");
 
     campaign.images = campaign.images.map(
       (image) => `${process.env.BASE_URL}/public/campaign/${image}`
@@ -265,7 +254,6 @@ const edit = async (req: Request, res: Response) => {
       ...req.matchedData,
     };
 
-    // data.dropOffLocations = JSON.parse(req.body.dropOffLocations || "[]");
     const { categoryId, locationId } = data;
 
     const category = await Category.findById(categoryId);
@@ -323,12 +311,8 @@ const edit = async (req: Request, res: Response) => {
     campaign.location = data.locationId;
     campaign.goalAmount = data.goalAmount;
     campaign.currency = data.currency;
-    // campaign.updates = data.updates;
-    // campaign.updates.push(String(data.updates));
 
     if (data.images) campaign.images = data.images;
-    // if (data.showInRecommendation !== undefined)
-    //   campaign.showInRecommendation = data.showInRecommendation;
 
     await campaign.save();
 
@@ -348,10 +332,6 @@ const edit = async (req: Request, res: Response) => {
 const remove = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    // const data = {
-    //   ...req.matchedData,
-    // };
-    // const { categoryId, locationId } = data;
     const campaign = await Campaign.findById(id);
 
     const category = await Category.findById(campaign?.category);

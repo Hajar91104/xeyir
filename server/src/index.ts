@@ -10,23 +10,16 @@ import path from "path";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 
-// import "./mongoose/schemas/review";
-
 import authRoutes from "./routes/auth";
 import campaignRoutes from "./routes/campaign";
 import categoryRoutes from "./routes/category";
 import commentRoutes from "./routes/comment";
 import locationRoutes from "./routes/location";
-// import updateRoutes from "./routes/update";
 import nonprofitRoutes from "./routes/nonprofit";
 import donationRoutes from "./routes/donation";
-// import reservationRoutes from "./routes/reservation";
 import conversationRoutes from "./routes/conversation";
-// import usersRoutes from "./routes/users.mjs";
 import "./auth/local-strategy";
 import { connectSocket } from "./socket";
-
-// import "./mongoose/schemas/message";
 
 dotenv.config();
 
@@ -65,9 +58,7 @@ app.use("/campaign", campaignRoutes);
 app.use("/donation", donationRoutes);
 app.use("/comment", commentRoutes);
 app.use("/conversation", conversationRoutes);
-// app.use("/update", updateRoutes);
 app.use("/nonprofit", nonprofitRoutes);
-// app.use("/users", usersRoutes);
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

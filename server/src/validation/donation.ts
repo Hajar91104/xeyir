@@ -6,11 +6,6 @@ export const createDonationSchema: Schema = {
     isString: true,
     notEmpty: true,
   },
-  // user: {
-  //   in: ["body"],
-  //   isString: true,
-  //   notEmpty: true,
-  // },
   amount: {
     in: ["body"],
     isNumeric: true,
@@ -19,7 +14,6 @@ export const createDonationSchema: Schema = {
   tip: {
     in: ["body"],
     isNumeric: true,
-    // notEmpty: true,
   },
   isAnonymous: {
     in: ["body"],

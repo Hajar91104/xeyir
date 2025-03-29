@@ -59,11 +59,6 @@ export const createCampaignSchema: Schema = {
     isString: true,
     notEmpty: true,
   },
-  // author: {
-  //   in: ["body"],
-  //   isString: true,
-  //   notEmpty: true,
-  // },
   goalAmount: {
     in: ["body"],
     isNumeric: true,
@@ -74,11 +69,6 @@ export const createCampaignSchema: Schema = {
     isString: true,
     notEmpty: true,
   },
-  //   showInRecommendation: {
-  //     in: ["body"],
-  //     isBoolean: true,
-  //     optional: true,
-  //   },
   locationId: {
     in: ["body"],
     isString: true,
@@ -111,11 +101,6 @@ export const editCampaignSchema: Schema = {
     isString: true,
     notEmpty: true,
   },
-  // updates: {
-  //   in: ["body"],
-  //   isString: true,
-  //   optional: true,
-  // },
   goalAmount: {
     in: ["body"],
     isNumeric: true,

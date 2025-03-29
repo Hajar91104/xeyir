@@ -4,7 +4,6 @@ import Campaign from "../mongoose/schemas/campaign";
 
 const getAll = async (req: Request, res: Response) => {
   try {
-    // const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
     const user = req.user;
     const filter: Record<string, string> = {};
     if (user?.role !== "admin") {

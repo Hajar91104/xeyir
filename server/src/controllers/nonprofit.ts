@@ -3,7 +3,6 @@ import Location from "../mongoose/schemas/location";
 import Nonprofit from "../mongoose/schemas/nonprofit";
 import Category from "../mongoose/schemas/category";
 import Comment from "../mongoose/schemas/comment";
-// import Update from "../mongoose/schemas/update";
 
 const getAll = async (req: Request, res: Response) => {
   try {

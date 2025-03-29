@@ -47,10 +47,6 @@ const campaignSchema = new Schema({
     ref: "Comment",
     default: [],
   },
-  // updates: {
-  //   type: String,
-  //   default: "",
-  // },
   donations: {
     type: [Types.ObjectId],
     ref: "Donation",
@@ -61,10 +57,6 @@ const campaignSchema = new Schema({
     enum: ["pending", "approved", "rejected"],
     default: "pending",
   },
-  //   showInRecommendation: {
-  //     type: Boolean,
-  //     default: false,
-  //   },
 });
 
 campaignSchema.set("toJSON", {
