@@ -39,7 +39,7 @@ const FundraisingSteps = () => {
         setCurrentStep((prevStep) =>
           prevStep === steps.length ? 1 : prevStep + 1
         );
-      }, 10000);
+      }, 6000);
 
       return () => clearTimeout(timer);
     }

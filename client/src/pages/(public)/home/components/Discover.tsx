@@ -34,7 +34,7 @@ export default function DiscoverSection() {
         <button className="text-[#252525] font-bold rounded-3xl py-1 px-6 border border-[#c0bdb8] cursor-none">
           Happening worldwide
         </button>
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <button
             className="border disabled:border-[#e5e1d7] disabled:text-[#c0bdb8] rounded-full w-8 h-8 text-[#252525] border-[#c0bdb8] hover:bg-[#2525250d] "
             onClick={() => setCurrentPage(1)}
@@ -49,7 +49,7 @@ export default function DiscoverSection() {
           >
             →
           </button>
-        </div>
+        </div> */}
       </div>
       <div>
         <DonationGrid fundraisers={recommendedCampaigns} />

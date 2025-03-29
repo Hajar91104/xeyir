@@ -29,6 +29,7 @@ import locationService from "@/services/location";
 import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { MAX_FILE_SIZE } from "@/constants";
+import { Category } from "@/types";
 
 const getFormSchema = (isEdit: boolean) =>
   z.object({
@@ -160,8 +161,8 @@ const ActionForm = ({ type }: ActionFormProps) => {
         description,
         currency,
         goalAmount,
-        category: category?._id || "",
-        location: location?._id || "",
+        category: (category as any) || "",
+        location: (location as any) || "",
         // updates,
         images: [],
       });

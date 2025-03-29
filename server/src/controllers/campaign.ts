@@ -179,7 +179,7 @@ const getById = async (req: Request, res: Response) => {
     const campaign = await Campaign.findById(id)
       .populate({
         path: "donations",
-        select: "user amount",
+        select: "user amount createdAt",
         populate: {
           path: "user",
           select: "name surname",

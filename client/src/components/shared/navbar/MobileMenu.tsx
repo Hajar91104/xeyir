@@ -30,8 +30,13 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           </button>
 
           <div className="flex flex-col space-y-4 mt-12">
-            {/* Donate */}
-            <div className="flex items-center justify-between cursor-pointer p-[1rem_0.5rem] rounded-[12px] duration-500 hover:bg-[#2525250d]">
+            <div
+              onClick={() => {
+                closeMenu();
+                navigate(paths.BROWSE);
+              }}
+              className="flex items-center justify-between cursor-pointer p-[1rem_0.5rem] rounded-[12px] duration-500 hover:bg-[#2525250d]"
+            >
               <div
                 onClick={() => navigate(paths.BROWSE)}
                 className="flex flex-col"
@@ -44,7 +49,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               <MdOutlineChevronRight size={20} />
             </div>
 
-            {/* Fundraise */}
             <div className="flex items-center justify-between cursor-pointer p-[1rem_0.5rem] rounded-[12px] duration-500 hover:bg-[#2525250d]">
               <div className="flex flex-col">
                 <h2 className="text-xl font-normal">Fundraise</h2>
@@ -55,7 +59,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               <MdOutlineChevronRight size={20} />
             </div>
 
-            {/* About */}
             <div className="flex items-center justify-between cursor-pointer p-[1rem_0.5rem] rounded-[12px] duration-500 hover:bg-[#2525250d]">
               <div className="flex flex-col">
                 <h2 className="text-xl font-normal">About</h2>
@@ -66,18 +69,41 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               <MdOutlineChevronRight size={20} />
             </div>
 
-            {/* Help Center */}
-            <div className="flex items-center justify-between cursor-pointer p-[1rem_0.5rem] rounded-[12px] duration-500 hover:bg-[#2525250d]">
-              <div className="flex flex-col">
-                <h2 className="text-xl font-normal">Help Center</h2>
-                <p className="text-[#6f6f6f] text-[0.875rem] mt-[2px]">
-                  Technical support and help
-                </p>
+            {user && (
+              <div
+                onClick={() => {
+                  closeMenu();
+                  navigate(paths.PROFILE.MAIN);
+                }}
+                className="flex items-center justify-between cursor-pointer p-[1rem_0.5rem] rounded-[12px] duration-500 hover:bg-[#2525250d]"
+              >
+                <div className="flex flex-col">
+                  <h2 className="text-xl font-normal">Profile</h2>
+                  <p className="text-[#6f6f6f] text-[0.875rem] mt-[2px]">
+                    Manage your campaigns and contributions
+                  </p>
+                </div>
+                <MdOutlineChevronRight size={20} />
               </div>
-              <MdOutlineChevronRight size={20} />
-            </div>
+            )}
+            {user?.role === "admin" && (
+              <div
+                onClick={() => {
+                  closeMenu();
+                  navigate(paths.DASHBOARD.MAIN);
+                }}
+                className="flex items-center justify-between cursor-pointer p-[1rem_0.5rem] rounded-[12px] duration-500 hover:bg-[#2525250d]"
+              >
+                <div className="flex flex-col">
+                  <h2 className="text-xl font-normal">Dashboard</h2>
+                  <p className="text-[#6f6f6f] text-[0.875rem] mt-[2px]">
+                    Access the dashboard
+                  </p>
+                </div>
+                <MdOutlineChevronRight size={20} />
+              </div>
+            )}
 
-            {/* If not logged in, show sign up + sign in buttons */}
             {!user && (
               <div className="flex flex-col items-center space-y-4 mt-8">
                 <button

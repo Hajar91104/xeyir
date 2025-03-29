@@ -41,7 +41,7 @@ const getByUserId = async (req: Request, res: Response) => {
       .populate("user")
       .populate({
         path: "campaign",
-        select: "donations images author category",
+        select: "donations images author category goalAmount title",
         populate: [
           {
             path: "donations",
