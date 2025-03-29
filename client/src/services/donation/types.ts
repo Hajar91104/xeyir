@@ -14,7 +14,6 @@ export type GetByUserIdDonationResponseType = {
 };
 export type DonationRequestPayload = {
   campaign: string;
-  // user: string;
   amount: number;
   tip: number;
   isAnonymous: boolean;
@@ -24,7 +23,3 @@ export type CreateDonationResponseType = {
   item?: Donation;
   message: string;
 };
-// export type ChangeStatusRequestPayload = {
-//   id: string;
-//   status: CampaignStatus.Approved | CampaignStatus.Rejected;
-// };

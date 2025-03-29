@@ -14,7 +14,6 @@ export type GetByIdsCommentResponseType = {
 };
 export type CommentRequestPayload = {
   campaign: string;
-  // user: string;
   donation: string;
   content: string;
 };

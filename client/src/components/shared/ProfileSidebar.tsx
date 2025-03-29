@@ -33,11 +33,6 @@ const items = [
     url: paths.PROFILE.GOFUNDME.LIST,
     icon: <MdOutlineCampaign size={20} />,
   },
-  // {
-  //   title: "Chat",
-  //   url: paths.PROFILE.CHAT.VIEW,
-  //   icon: MessageCircleIcon,
-  // },
 ];
 
 export const ProfileSidebar = () => {

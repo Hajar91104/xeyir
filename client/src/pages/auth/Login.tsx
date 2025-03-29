@@ -155,6 +155,3 @@ export const LoginPage = () => {
 };
 
 export default LoginPage;
-// function useAppDispatch() {
-//   throw new Error("Function not implemented.");
-// }

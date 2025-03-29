@@ -25,7 +25,7 @@ export type Campaign = {
   currency: string;
   images: string[];
   createdAt: string;
-  donations: Donation[]; //Donations
+  donations: Donation[];
   author: User;
   status: "pending" | "rejected" | "approved";
   comments: Comment[];
@@ -60,9 +60,8 @@ export type Category = {
   _id: string;
   createdAt: string;
   name: string;
-  // count: number;
 };
-// export type Reservation = {
+
 //   billing: {
 //     name: string;
 //     phoneNumber: string;
@@ -87,7 +86,6 @@ export type Comment = {
   author: User;
   content: string;
   createdAt: string;
-  // id: string;
   donation: Donation;
   campaign: Campaign;
   status: CommentStatus;
@@ -111,10 +109,6 @@ export type Message = {
   updatedAt: string;
   _id: string;
 };
-// export type SelectOption = {
-//   value: string;
-//   label: string;
-// };
 
 export enum UserRole {
   Admin = "admin",
@@ -134,8 +128,3 @@ export enum NonprofitStatus {
   Verified = "verified",
   Unverified = "unverified",
 }
-// export enum ReviewStatus {
-//   Pending = "pending",
-//   Approved = "approved",
-//   Rejected = "rejected",
-// }

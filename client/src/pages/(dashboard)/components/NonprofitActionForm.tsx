@@ -21,8 +21,6 @@ import { toast } from "sonner";
 import { MAX_FILE_SIZE } from "@/constants";
 import nonprofitService from "@/services/nonprofit";
 
-// We'll rely on the 'status' field to be either 'verified' or 'unverified' on create.
-// The isVerified boolean just toggles the final status.
 const getFormSchema = (isEdit: boolean) =>
   z.object({
     title: z.string().min(2, "Title is required!").max(50),
@@ -121,8 +119,8 @@ export function ActionForm({ type }: ActionFormProps) {
         address,
         causes,
         established,
-        isVerified: status === "verified", // if status is verified, check the box
-        verified: verified || "", // store any date or info for verified
+        isVerified: status === "verified",
+        verified: verified || "",
         taxId,
         images: [],
       });
@@ -130,10 +128,8 @@ export function ActionForm({ type }: ActionFormProps) {
   }, [editData, form, isEdit]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Convert isVerified -> actual status field
     const finalStatus = values.isVerified ? "verified" : "unverified";
 
-    // If isVerified is true, keep verified field; otherwise, clear it.
     const verifiedDate = values.isVerified ? values.verified : "";
 
     const payload = {
@@ -248,7 +244,6 @@ export function ActionForm({ type }: ActionFormProps) {
           )}
         />
 
-        {/* Checkbox to toggle if it's verified */}
         <FormField
           control={form.control}
           name="isVerified"
@@ -266,7 +261,6 @@ export function ActionForm({ type }: ActionFormProps) {
           )}
         />
 
-        {/* If the user checks isVerified, show the verification date input */}
         {form.watch("isVerified") && (
           <FormField
             control={form.control}
@@ -287,7 +281,6 @@ export function ActionForm({ type }: ActionFormProps) {
           />
         )}
 
-        {/* Only require images if creating */}
         {!isEdit && (
           <FormField
             control={form.control}

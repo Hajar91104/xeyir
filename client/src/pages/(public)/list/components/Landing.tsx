@@ -4,47 +4,6 @@ import { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Campaign, Nonprofit } from "@/types";
 
-//   {
-//     image: Discover1,
-//     title: "Support Jack Grivetti's Recovery",
-//     donations: "1.2K",
-//     currency: "$",
-//     goalAmount: 45000,
-//     amountRaised: 65683,
-//   },
-//   {
-//     image: Discover2,
-//     title: "UNLEASH THE FURY- For the love of Wes Johnson",
-//     donations: "2.9K",
-//     currency: "$",
-//     goalAmount: 200000,
-//     amountRaised: 170481,
-//   },
-//   {
-//     image: Discover3,
-//     title: "Support Primrose in Her Fight Against Leukaemia",
-//     donations: "1.1K",
-//     currency: "£",
-//     goalAmount: 3000,
-//     amountRaised: 26291,
-//   },
-//   {
-//     image: Discover4,
-//     title: "Rebuilding a home - Maureen Folan (McDonagh)",
-//     donations: "1.3K ",
-//     currency: "€",
-//     goalAmount: 100000,
-//     amountRaised: 59045,
-//   },
-//   {
-//     image: Discover5,
-//     title: "Justice for Mandi: Support Her Family",
-//     donations: "726 ",
-//     currency: "$",
-//     goalAmount: 30000,
-//     amountRaised: 48417,
-//   },
-// ];
 type Props = {
   fundraisers: Campaign[];
   nonprofits: Nonprofit[];

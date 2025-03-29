@@ -59,24 +59,6 @@ const DetailCard = ({ campaign }: Props) => {
             <p>{campaign.description}</p>
           </div>
 
-          {/* <div className="pt-12 pb-10 border-y border-grey flex flex-col ">
-            <h1 className="text-2xl font-semibold mb-8 ">Updates (1)</h1>
-            <p className="text-base font-bold mb-2">
-              Today{" "}
-              <span className="text-sm font-normal ml-2 text-secondary">
-                by LaShawn Hamiel, Organizer
-              </span>
-            </p>
-            <p className="text-left">
-              I love (ALL) of you Truly!!!! <br /> My Son Andre "Tre" The world
-              biggest SUPERHERO is Definitely loved; Blessed by you all. ♥️{" "}
-              <br /> With everyone prayers and words of encouragement, this will
-              make the Road to Recovery ❤️‍ that much easier. Each Donation
-              given is Deeply appreciated. We wouldn't have been this strong
-              without the support and help of you all. <br /> Thank you!!!
-            </p>
-          </div> */}
-
           <div className="pt-12 pb-10 flex flex-col ">
             <h1 className="text-2xl font-semibold mb-6 ">
               Words of Support ({campaign.comments.length})

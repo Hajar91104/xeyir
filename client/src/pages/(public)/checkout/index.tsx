@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import CheckoutCard from "./components/CheckoutCard";
-import DetailImage from "@/assets/images/andrew_detail.png";
 import { Link, useParams } from "react-router-dom";
 import { QUERY_KEYS } from "@/constants/query-keys";
 import campaignService from "@/services/campaign";

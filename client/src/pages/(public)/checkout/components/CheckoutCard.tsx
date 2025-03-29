@@ -86,8 +86,8 @@ const CheckoutCard = ({ fundraiser }: Props) => {
 
     const payload = {
       campaign: fundraiser._id,
-      amount: Number(data.amount), // Ensure number
-      tip: Number(data.tip) || 0, // Handle empty tip properly
+      amount: Number(data.amount),
+      tip: Number(data.tip) || 0,
       isAnonymous: data.isAnonymous,
     };
 
@@ -95,13 +95,11 @@ const CheckoutCard = ({ fundraiser }: Props) => {
     mutate(payload);
   };
 
-  // A helper to get total from form data
   const totalDue = (form.watch("amount") || 0) * (1 + form.watch("tip") / 100);
 
   return (
     <div className="w-full lg:max-w-[655px] mx-auto">
       <Card className="px-4 py-6 xs:py-8 xs:px-12 rounded-[2.5rem]">
-        {/* Fundraiser info */}
         <div className="flex flex-col lg:flex-row  gap-4 mt-6 mb-6">
           <img
             src={fundraiser.images[0]}

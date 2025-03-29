@@ -15,11 +15,7 @@ const CampaignsSection = ({ donations }: Props) => {
       </h1>
       <div className="grid sm:grid-cols-4 grid-cols-1 gap-3">
         {donations.map((fundraiser, index) => (
-          <DonationCard
-            key={index}
-            fundraiser={fundraiser.campaign}
-            //   className="text-white bg-transparent border-none hover:bg-[#0003]"
-          />
+          <DonationCard key={index} fundraiser={fundraiser.campaign} />
         ))}
       </div>
     </div>

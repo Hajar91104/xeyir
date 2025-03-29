@@ -29,7 +29,6 @@ const BrowsePage = () => {
     timeoutId = setTimeout(() => {
       searchParams.set("search", searchText);
       setSearchParams(searchParams);
-      // if (!isListingPage) navigate(paths.LIST + `?${searchParams.toString()}`);
     }, 300);
   }
 

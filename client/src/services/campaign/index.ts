@@ -11,7 +11,6 @@ const getAll = async (
   pageParams?: {
     take?: number;
     skip?: number;
-    // type?: "recommended" | "popular";
   },
   searchParamsStr?: string
 ) => {
@@ -19,7 +18,6 @@ const getAll = async (
 
   if (pageParams?.take) searchParams.append("take", pageParams.take.toString());
   if (pageParams?.skip) searchParams.append("skip", pageParams.skip.toString());
-  // if (pageParams?.type) searchParams.append("type", pageParams.type);
 
   return await axiosInstance.get<GetAllCampaignsResponseType>(
     `/campaign?${searchParams.toString()}`

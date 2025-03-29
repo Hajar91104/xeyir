@@ -29,13 +29,11 @@ import locationService from "@/services/location";
 import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { MAX_FILE_SIZE } from "@/constants";
-import { Category } from "@/types";
 
 const getFormSchema = (isEdit: boolean) =>
   z.object({
     title: z.string().min(2, "Title is required!").max(50),
     description: z.string().min(10, "Description is required"),
-    // updates: z.string(),
     currency: z.string(),
     goalAmount: z
       .number({
@@ -86,7 +84,7 @@ const ActionForm = ({ type }: ActionFormProps) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { data: editData, isLoading } = useQuery({
+  const { data: editData } = useQuery({
     queryKey: [QUERY_KEYS.ADMIN_CAMPAIGN_DETAIL, id],
     queryFn: () => campaignService.getById(id!),
     enabled: isEdit,
@@ -138,7 +136,6 @@ const ActionForm = ({ type }: ActionFormProps) => {
       goalAmount: 0,
       category: "",
       location: "",
-      // updates: "",
       images: [],
     },
   });
@@ -146,15 +143,8 @@ const ActionForm = ({ type }: ActionFormProps) => {
 
   useEffect(() => {
     if (isEdit && editData?.data?.item) {
-      const {
-        title,
-        description,
-        currency,
-        goalAmount,
-        category,
-        location,
-        // updates,
-      } = editData.data.item;
+      const { title, description, currency, goalAmount, category, location } =
+        editData.data.item;
 
       form.reset({
         title,
@@ -163,7 +153,6 @@ const ActionForm = ({ type }: ActionFormProps) => {
         goalAmount,
         category: (category as any) || "",
         location: (location as any) || "",
-        // updates,
         images: [],
       });
     }
@@ -175,7 +164,6 @@ const ActionForm = ({ type }: ActionFormProps) => {
       title: values.title,
       description: values.description,
       currency: values.currency,
-      // updates: values.updates || "",
       goalAmount: values.goalAmount,
       categoryId: values.category,
       locationId: values.location,
@@ -320,26 +308,6 @@ const ActionForm = ({ type }: ActionFormProps) => {
             </FormItem>
           )}
         />
-        {/* {isEdit && (
-          <FormField
-            control={form.control}
-            name="updates"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Update</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Type..."
-                    {...field}
-                    value={field.value || ""}
-                    onChange={(e) => field.onChange(e.target.value)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )} */}
         <FormField
           control={form.control}
           name="images"

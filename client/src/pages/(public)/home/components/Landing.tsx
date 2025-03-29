@@ -8,14 +8,6 @@ import Business from "@/assets/images/hero-business-1.png";
 import { RxLightningBolt } from "react-icons/rx";
 import { TbHeartStar } from "react-icons/tb";
 import { BsEnvelopeHeart } from "react-icons/bs";
-// const categories = [
-//   { id: 1, name: "Your Cause", image: YourCause },
-//   { id: 2, name: "Medical", image: Medical },
-//   { id: 3, name: "Emergency", image: Emergency },
-//   { id: 4, name: "Education", image: Education },
-//   { id: 5, name: "Animal", image: Animal },
-//   { id: 6, name: "Business", image: Business },
-// ];
 
 const LandingSection = () => {
   return (

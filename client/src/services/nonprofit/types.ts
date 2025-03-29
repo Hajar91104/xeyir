@@ -1,4 +1,4 @@
-import { Campaign, CampaignStatus, Nonprofit, NonprofitStatus } from "@/types";
+import { Nonprofit, NonprofitStatus } from "@/types";
 
 export type GetAllNonprofitsResponseType = {
   items: Nonprofit[];

@@ -11,7 +11,6 @@ const getAll = async (
   pageParams?: {
     take?: number;
     skip?: number;
-    // type?: "recommended" | "popular";
   },
   searchParamsStr?: string
 ) => {
@@ -19,7 +18,6 @@ const getAll = async (
 
   if (pageParams?.take) searchParams.append("take", pageParams.take.toString());
   if (pageParams?.skip) searchParams.append("skip", pageParams.skip.toString());
-  // if (pageParams?.type) searchParams.append("type", pageParams.type);
 
   return await axiosInstance.get<GetAllNonprofitsResponseType>(
     `/nonprofit?${searchParams.toString()}`
@@ -44,7 +42,7 @@ const create = async (data: NonprofitRequestPayload) => {
   formData.append("address", data.address);
   formData.append("causes", data.causes);
   formData.append("established", data.established);
-  formData.append("verified", data.verified);
+  formData.append("verified", data.verified!);
   formData.append("taxId", data.taxId);
 
   data.images?.forEach((image) => {
@@ -61,7 +59,7 @@ const edit = async (data: NonprofitRequestPayload & { id?: string }) => {
   formData.append("address", data.address);
   formData.append("causes", data.causes);
   formData.append("established", data.established);
-  formData.append("verified", data.verified);
+  formData.append("verified", data.verified!);
   formData.append("taxId", data.taxId);
   if (data.images)
     Array.from(data.images).forEach((image) => {

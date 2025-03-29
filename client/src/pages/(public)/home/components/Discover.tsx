@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import DonationGrid from "@/components/shared/DonationGrid";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/constants/query-keys";
@@ -7,7 +5,6 @@ import campaignService from "@/services/campaign";
 import { Spinner } from "@/components/shared/Spinner";
 
 export default function DiscoverSection() {
-  const [currentPage, setCurrentPage] = useState(1);
   const { data: recommendedData, isLoading: recommendedLoading } = useQuery({
     queryKey: [QUERY_KEYS.CAMPAIGN_LIST],
     queryFn: () => campaignService.getAll(),
@@ -34,22 +31,6 @@ export default function DiscoverSection() {
         <button className="text-[#252525] font-bold rounded-3xl py-1 px-6 border border-[#c0bdb8] cursor-none">
           Happening worldwide
         </button>
-        {/* <div className="flex items-center gap-2">
-          <button
-            className="border disabled:border-[#e5e1d7] disabled:text-[#c0bdb8] rounded-full w-8 h-8 text-[#252525] border-[#c0bdb8] hover:bg-[#2525250d] "
-            onClick={() => setCurrentPage(1)}
-            disabled={currentPage === 1}
-          >
-            ←
-          </button>
-          <button
-            className="border disabled:border-[#e5e1d7] disabled:text-[#c0bdb8] rounded-full w-8 h-8 text-[#252525] border-[#c0bdb8] hover:bg-[#2525250d] "
-            onClick={() => setCurrentPage(2)}
-            disabled={currentPage === 2}
-          >
-            →
-          </button>
-        </div> */}
       </div>
       <div>
         <DonationGrid fundraisers={recommendedCampaigns} />

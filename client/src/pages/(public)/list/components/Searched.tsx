@@ -480,11 +480,7 @@ export default function SearchedSection() {
 
             <button
               className="px-4 py-2 rounded-full border border-[#c0bdb8] hover:bg-[#fbfaf8] hover:border-secondary-foreground duration-500"
-              onClick={() => {
-                /* If you also want to store this in params:
-                 * handleSingleParamChange("nonprofits", "true");
-                 */
-              }}
+              onClick={() => {}}
             >
               <span className="font-medium text-[14px]">Nonprofits</span>
             </button>

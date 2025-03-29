@@ -1,4 +1,3 @@
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
@@ -57,7 +56,6 @@ function transformPieData(donations: any[]) {
   donations.forEach((donation) => {
     const categoryName = donation.campaign?.category?.name || "Uncategorized";
 
-    // Sum amounts
     amountsByCategory[categoryName] =
       (amountsByCategory[categoryName] || 0) + donation.amount;
     totalAmount += donation.amount;

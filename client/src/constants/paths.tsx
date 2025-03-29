@@ -13,11 +13,6 @@ export const paths = {
       CREATE: "/profile/gofundme/create",
       EDIT: (id = ":id") => `/profile/gofundme/edit/${id}`,
     },
-    // ORGANISATION: {
-    //   LIST: "/profile/organisation",
-    //   CREATE: "/profile/organisation/create",
-    //   EDIT: (id = ":id") => `/profile/organisation/edit/${id}`,
-    // },
   },
   DASHBOARD: {
     MAIN: "/dashboard",

@@ -8,11 +8,7 @@ import {
 const getAll = async () => {
   return await axiosInstance.get<GetAllDonationsResponseType>(`/donation`);
 };
-// const getById = async (id: string) => {
-//   return await axiosInstance.get<GetByIdCampaignResponseType>(
-//     `/campaign/${id}`
-//   );
-// };
+
 const getByUserId = async ({ userId }: { userId: string }) => {
   return await axiosInstance.get<GetByUserIdDonationResponseType>(
     `/donation/user/${userId}`
@@ -20,7 +16,7 @@ const getByUserId = async ({ userId }: { userId: string }) => {
 };
 
 const create = async (data: DonationRequestPayload) => {
-  return await axiosInstance.post("/donation", data); // Send JSON directly
+  return await axiosInstance.post("/donation", data);
 };
 
 const donationService = {

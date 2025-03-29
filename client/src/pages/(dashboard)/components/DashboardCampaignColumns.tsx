@@ -68,18 +68,6 @@ export const dashboardCampaignColumns: ColumnDef<Campaign>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: "amountDonated",
-  //   header: () => <span className="hidden sm:block">Donated</span>,
-
-  //   cell: ({ row }) => {
-  //     return (
-  //       <span className="hidden sm:block text-nowrap">
-  //         {row.original.amountDonated.toLocaleString()} {row.original.currency}
-  //       </span>
-  //     );
-  //   },
-  // },
   {
     accessorKey: "status",
     header: "Status",
